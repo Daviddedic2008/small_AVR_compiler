@@ -1,0 +1,3 @@
+﻿  parser.cpp
+C:\Users\david\OneDrive\Documents\c_style_compiler_avr\parser.cpp(69,1): warning C4715: 'getTypeOfNextNode': not all control paths return a value
+  c_style_compiler_avr.vcxproj -> C:\Users\david\OneDrive\Documents\c_style_compiler_avr\x64\Debug\c_style_compiler_avr.exe
