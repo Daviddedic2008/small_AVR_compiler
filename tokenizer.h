@@ -13,12 +13,12 @@
 #define OP_MUL 6
 #define OP_DIV 7
 #define OP_EQUALS_EQUALS 8
-#define OP_INCREMENT 9
-#define OP_DECREMENT 10
-#define OP_GREATER 11
-#define OP_LESS 12
-#define OP_GREATER_EQUAL 13
-#define OP_LESS_EQUAL 14
+#define OP_GREATER 9
+#define OP_LESS 10
+#define OP_GREATER_EQUAL 11
+#define OP_LESS_EQUAL 12
+#define OP_INCREMENT 13
+#define OP_DECREMENT 14
 
 #define NAME_TOKEN 1
 #define NAME_VAR 0
@@ -76,6 +76,8 @@ struct token_str {
 
 	token_str(){}
 };
+
+std::list<token_str> returnTokenList();
 
 void setSrc(std::string s);
 

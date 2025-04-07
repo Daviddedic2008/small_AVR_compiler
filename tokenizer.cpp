@@ -18,6 +18,10 @@ char SINGLE_CHARS[] = { '(', ')', '[', ']', '{', '}', ';' };
 std::list<token_str> tokens;
 std::list<token_str>::iterator iterator;
 
+std::list<token_str> returnTokenList() {
+	return tokens;
+}
+
 int charInOps(const char c) {
 	for (int i = 0; i < NUM_OP_CHARS; i++) {
 		if (OP_CHARS[i] == c) {

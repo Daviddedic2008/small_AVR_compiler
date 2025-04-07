@@ -1,4 +1,1 @@
-for(int x = 0; x<=5; x++){
-	int y_int = x+ 5;
-	y_int --;
-}
+x = 5 + 3;

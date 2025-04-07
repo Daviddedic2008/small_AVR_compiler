@@ -4,6 +4,7 @@
 #include <iostream>
 #include "fileToString.h"
 #include "tokenizer.h"
+#include "parser.h"
 
 int main()
 {
@@ -14,9 +15,17 @@ int main()
     setIterator();
     printf("tokenized\n\n");
     printf("tokens:     \n");
+
     for (; !isIteratorEnd(); advanceIterator()) {
         if (getTypeIterator() != -1) {
             printf("%s: %s\n", getTypeStringIterator(), getStringIterator());
         }
     }
+
+    printf("\n\n");
+
+    setTokenSrc(returnTokenList());
+    syntaxNode* n = returnExpressionNode(0, 10);
+
+
 }

@@ -163,3 +163,7 @@ public:
 		}
 	}
 };
+
+void setTokenSrc(std::list<token_str> s);
+
+syntaxNode* parseExpressionNode(const int startIndex, const int endIndex);

@@ -3,10 +3,6 @@
   "WorkspaceRootPath": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:parser.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:parser.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -19,16 +15,20 @@
       "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:tokenizer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:tokenizer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\c_style_compiler_avr.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:c_style_compiler_avr.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:fileToString.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:parser.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:tokenizer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:fileToString.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -55,109 +55,31 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "parser.cpp",
               "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.cpp",
               "RelativeDocumentMoniker": "parser.cpp",
-              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.cpp",
-              "RelativeToolTip": "parser.cpp",
-              "ViewState": "AgIAADkAAAAAAAAAAAAAAFEAAAAVAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.cpp*",
+              "RelativeToolTip": "parser.cpp*",
+              "ViewState": "AgIAADoAAAAAAAAAAAAkwFoAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-01-30T18:38:51.941Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "c_style_compiler_avr.cpp",
-              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\c_style_compiler_avr.cpp",
-              "RelativeDocumentMoniker": "c_style_compiler_avr.cpp",
-              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\c_style_compiler_avr.cpp",
-              "RelativeToolTip": "c_style_compiler_avr.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-01-28T13:24:08.215Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "fileToString.h",
-              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.h",
-              "RelativeDocumentMoniker": "fileToString.h",
-              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.h",
-              "RelativeToolTip": "fileToString.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAA8AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-01-29T06:29:28.647Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "parser.h",
-              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.h",
-              "RelativeDocumentMoniker": "parser.h",
-              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.h*",
-              "RelativeToolTip": "parser.h*",
-              "ViewState": "AgIAADwAAAAAAAAAAAAAAFIAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-01-30T18:38:58.753Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "tokenizer.h",
-              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.h",
-              "RelativeDocumentMoniker": "tokenizer.h",
-              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.h",
-              "RelativeToolTip": "tokenizer.h",
-              "ViewState": "AgIAACQAAAAAAAAAAAAAADIAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-01-28T13:24:50.356Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "tokenizer.cpp",
-              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.cpp",
-              "RelativeDocumentMoniker": "tokenizer.cpp",
-              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.cpp",
-              "RelativeToolTip": "tokenizer.cpp",
-              "ViewState": "AgIAAF0AAAAAAAAAAAAAAHMAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-01-28T17:45:06.383Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "fileToString.cpp",
-              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.cpp",
-              "RelativeDocumentMoniker": "fileToString.cpp",
-              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.cpp",
-              "RelativeToolTip": "fileToString.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-01-29T06:28:46.634Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "src.txt",
-              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\src.txt",
-              "RelativeDocumentMoniker": "src.txt",
-              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\src.txt",
-              "RelativeToolTip": "src.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-01-29T17:19:11.744Z",
               "EditorCaption": ""
             },
             {
@@ -171,18 +93,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-02-06T17:39:10.689Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "out.txt",
-              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\out.txt",
-              "RelativeDocumentMoniker": "out.txt",
-              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\out.txt",
-              "RelativeToolTip": "out.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-01-29T17:19:22.565Z"
             },
             {
               "$type": "Document",
@@ -207,6 +117,107 @@
               "ViewState": "AgIAALwBAAAAAAAAAAAtwM4BAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-01-30T13:57:28.515Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "c_style_compiler_avr.cpp",
+              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\c_style_compiler_avr.cpp",
+              "RelativeDocumentMoniker": "c_style_compiler_avr.cpp",
+              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\c_style_compiler_avr.cpp",
+              "RelativeToolTip": "c_style_compiler_avr.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-28T13:24:08.215Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "fileToString.h",
+              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.h",
+              "RelativeDocumentMoniker": "fileToString.h",
+              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.h",
+              "RelativeToolTip": "fileToString.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-29T06:29:28.647Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "parser.h",
+              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.h",
+              "RelativeDocumentMoniker": "parser.h",
+              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.h",
+              "RelativeToolTip": "parser.h",
+              "ViewState": "AgIAAIkAAAAAAAAAAAAAAKYAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-30T18:38:58.753Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "tokenizer.h",
+              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.h",
+              "RelativeDocumentMoniker": "tokenizer.h",
+              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.h",
+              "RelativeToolTip": "tokenizer.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-28T13:24:50.356Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "tokenizer.cpp",
+              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.cpp",
+              "RelativeDocumentMoniker": "tokenizer.cpp",
+              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.cpp",
+              "RelativeToolTip": "tokenizer.cpp",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-28T17:45:06.383Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "fileToString.cpp",
+              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.cpp",
+              "RelativeDocumentMoniker": "fileToString.cpp",
+              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.cpp",
+              "RelativeToolTip": "fileToString.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-29T06:28:46.634Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "src.txt",
+              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\src.txt",
+              "RelativeDocumentMoniker": "src.txt",
+              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\src.txt",
+              "RelativeToolTip": "src.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-01-29T17:19:11.744Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "out.txt",
+              "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\out.txt",
+              "RelativeDocumentMoniker": "out.txt",
+              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\out.txt",
+              "RelativeToolTip": "out.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-01-29T17:19:22.565Z"
             }
           ]
         }
