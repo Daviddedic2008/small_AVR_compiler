@@ -32,6 +32,7 @@ token_str eatToken() {
 token_str eatTokenArr() {
 	const token_str ret = tokensRandomAccessArray[currentIndexArr];
 	currentIndexArr++;
+	return ret;
 }
 
 token_str spitToken() {
@@ -89,14 +90,19 @@ syntaxNode* parseExpressionNode(const int startIndex, const int endIndex) {
 		case END_LINE_TOKEN:
 			delete(ret);
 			switch (curToken.t.type) {
+				literalNode* ret2;
+				identifierNode* ret3;
+				syntaxNode* ret4;
+
 			case CONSTANT_TOKEN:
-				literalNode* ret2 = new literalNode(std::stoi(curToken.str));
+				ret2 = new literalNode(std::stoi(curToken.str));
 				return ret2;
 			case NAME_TOKEN:
-				identifierNode* ret2 = new identifierNode(curToken);
-				return ret2;
+				ret3 = new identifierNode(curToken);
+				return ret3;
 			default:
-				return new syntaxNode(nodeType::uninitialized);
+				ret4 = new syntaxNode(nodeType::uninitialized);
+				return ret4;
 			}
 			break;
 
@@ -127,9 +133,13 @@ syntaxNode* parseExpression(const int startIndex, const int endIndex) {
 
 	token_str opToken = spitTokenArr();
 
-	operatorNode ret = operatorNode(opToken.t);
+	operatorNode* ret = new operatorNode(opToken.t);
 
-	*ret.getValue1() = identifierNode(varToken);
+	*ret->getValue1() = identifierNode(varToken);
+
+	*ret->getValue2() = *parseExpressionNode(startIndex, endIndex);
+
+	return ret;
 }
 
 void parseIfNode(keywordNode* node) {

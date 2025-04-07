@@ -25,7 +25,7 @@ int main()
     printf("\n\n");
 
     setTokenSrc(returnTokenList());
-    syntaxNode* n = returnExpressionNode(0, 10);
+    syntaxNode* n = parseExpression(0, 10);
 
 
 }
