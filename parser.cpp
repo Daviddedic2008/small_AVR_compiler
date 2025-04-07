@@ -15,9 +15,13 @@ void setTokenSrc(std::list<token_str> s) {
 	currentIndex = 0;
 	currentIndexArr = 0;
 	tokenSrcIterator = s.begin();
+	delete[] tokensRandomAccessArray;
+
 	tokensRandomAccessArray = new token_str[tokenSrc.size()];
-	for (int i = 0; i < tokenSrc.size(); tokenSrcIterator++, i++) {
-		tokensRandomAccessArray[i] = *tokenSrcIterator;
+	int i = 0;
+	for (auto it = tokenSrc.begin(); it != tokenSrc.end(); ++it, ++i) {
+		if (it->t.type == -1) { continue; }
+		tokensRandomAccessArray[i] = *it;
 	}
 	tokenSrcIterator = s.begin();
 }
@@ -79,16 +83,16 @@ nodeType getTypeOfNextNode(int startIndex, int endIndex) {
 syntaxNode* parseExpressionNode(const int startIndex, const int endIndex) {
 	const int oldPos = currentIndexArr;
 	setArrayPosition(startIndex);
-	operatorNode* ret = new operatorNode;
+	operatorNode* ret = new operatorNode();
 
-	token_str curToken = eatTokenArr();
+	token_str curToken = tokensRandomAccessArray[startIndex];
 
-	token_str nextToken = eatTokenArr();
+	token_str nextToken = tokensRandomAccessArray[startIndex+1];
 
 	switch (nextToken.t.type) {
 
 		case END_LINE_TOKEN:
-			delete(ret);
+			delete ret;
 			switch (curToken.t.type) {
 				literalNode* ret2;
 				identifierNode* ret3;
@@ -101,15 +105,18 @@ syntaxNode* parseExpressionNode(const int startIndex, const int endIndex) {
 				ret3 = new identifierNode(curToken);
 				return ret3;
 			default:
+				
 				ret4 = new syntaxNode(nodeType::uninitialized);
 				return ret4;
 			}
 			break;
 
 		case OPERATION_TOKEN:
-			ret->operatorToken = nextToken.t;
+			delete ret;
+			ret = new operatorNode(nextToken.t);
+			
 			*ret->getValue1() = (curToken.t.type == NAME_TOKEN) ? (syntaxNode)identifierNode(curToken) : (syntaxNode)literalNode(std::stoi(curToken.str));
-			token_str tokenTmp = eatTokenArr();
+			token_str tokenTmp = tokensRandomAccessArray[startIndex + 2];
 			if (tokenTmp.t.type == END_LINE_TOKEN) {
 				if (tokenTmp.t.subtype > 12) {
 					// inc or dec
@@ -120,8 +127,6 @@ syntaxNode* parseExpressionNode(const int startIndex, const int endIndex) {
 			*ret->getValue2() = *parseExpressionNode(startIndex + 2, endIndex);
 			break;
 	}
-
-	setArrayPosition(oldPos);
 	return ret;
 }
 
@@ -137,7 +142,7 @@ syntaxNode* parseExpression(const int startIndex, const int endIndex) {
 
 	*ret->getValue1() = identifierNode(varToken);
 
-	*ret->getValue2() = *parseExpressionNode(startIndex, endIndex);
+	*ret->getValue2() = *parseExpressionNode(startIndex+2, endIndex);
 
 	return ret;
 }

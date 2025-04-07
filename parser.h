@@ -42,6 +42,29 @@ public:
 	void insertNode(syntaxNode n, int index) {
 		childNodes.insert(childNodes.begin()+index, n);
 	}
+
+
+	void printNode() {
+		printf("[ ");
+		switch (type) {
+
+		case nodeType::literalNode:
+			printf("literal ");
+			break;
+		case nodeType::identifierNode:
+			printf("identifier ");
+			break;
+		case nodeType::opNode:
+			printf("op ");
+			break;
+		}
+		
+		for (auto it = childNodes.begin(); it != childNodes.end(); it++) {
+			it->printNode();
+		}
+
+		printf(" ]");
+	}
 	
 	// implement depth algo
 	// scans first layer of nodes(ifs, assignment ops, fors, whiles, etc)

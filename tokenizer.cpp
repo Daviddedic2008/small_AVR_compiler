@@ -234,7 +234,7 @@ token_str advanceToken() {
 	std::string retString;
 
 	if (charId == src.size()) {
-		return token_str(token(-1, -1), "~");
+		return token_str(token(100, -1), "~");
 	}
 	
 	int inOps = charInOps(peekAtCurrentChar());
@@ -282,6 +282,8 @@ void tokenizeSrc() {
 		if (s.str == "~") {
 			return;
 		}
-		tokens.push_back(s);
+		if (s.t.type != -1) {
+			tokens.push_back(s);
+		}
 	}
 }
