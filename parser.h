@@ -3,190 +3,165 @@
 #include "tokenizer.h"
 
 enum class nodeType {
-	uninitialized,
+    uninitialized,
 
-	opNode,
-	identifierNode,
-	literalNode,
-	compareNode,
-	keywordNode,
+    opNode,
+    identifierNode,
+    literalNode,
+    compareNode,
+    keywordNode,
 
-	bodyStatement,
-	comparisonStatement,
-	iteratorStatement,
-	preconditionStatement
+    bodyStatement,
+    comparisonStatement,
+    iteratorStatement,
+    preconditionStatement
 };
 
 class syntaxNode {
 public:
+    virtual ~syntaxNode() {
+        for (auto child : childNodes) {
+            delete child;
+        }
+    }
 
-	virtual ~syntaxNode() = default;
+    nodeType type;
 
+    syntaxNode() : type(nodeType::uninitialized) {}
 
-	nodeType type;
+    syntaxNode(nodeType t) : type(t) {}
 
-	syntaxNode() {}
+    std::vector<syntaxNode*> childNodes;
 
-	syntaxNode(nodeType t) : type(t) {}
+    void addToLeft(syntaxNode* n) {
+        childNodes.insert(childNodes.begin(), n);
+    }
 
-	std::vector<syntaxNode> childNodes;
+    void addToRight(syntaxNode* n) {
+        childNodes.push_back(n);
+    }
 
-	void addToLeft(syntaxNode n) {
-		childNodes.insert(childNodes.begin(), n);
-	}
+    void insertNode(syntaxNode* n, int index) {
+        childNodes.insert(childNodes.begin() + index, n);
+    }
 
-	void addToRight(syntaxNode n) {
-		childNodes.push_back(n);
-	}
-
-	void insertNode(syntaxNode n, int index) {
-		childNodes.insert(childNodes.begin()+index, n);
-	}
-
-
-	void printNode() {
-		printf("[ ");
-		switch (type) {
-
-		case nodeType::literalNode:
-			printf("literal ");
-			break;
-		case nodeType::identifierNode:
-			printf("identifier ");
-			break;
-		case nodeType::opNode:
-			printf("op ");
-			break;
-		}
-		
-		for (auto it = childNodes.begin(); it != childNodes.end(); it++) {
-			it->printNode();
-		}
-
-		printf(" ]");
-	}
-	
-	// implement depth algo
-	// scans first layer of nodes(ifs, assignment ops, fors, whiles, etc)
-	// lists down token locations of the start of each op's body
-	// recursively does this until each node is reduced down to primitives(ops and immediate/variable values)
-	// each next pass inits each node inside the subNodes of the previously returned layer
-	// should result in a properly ordered tree
 };
 
 class literalNode : public syntaxNode {
 public:
+    int value;
 
-	int value;
+    literalNode(int v) : syntaxNode(nodeType::literalNode), value(v) {}
 
-	literalNode(int v) : syntaxNode(nodeType::literalNode), value(v){}
-
-	bool canParseFurther() {
-		return false;
-	}
+    bool canParseFurther() {
+        return false;
+    }
 };
 
 class identifierNode : public syntaxNode {
 public:
+    token_str identifier;
 
-	token_str identifier;
+    identifierNode(token_str s) : syntaxNode(nodeType::identifierNode), identifier(s) {}
 
-	identifierNode(token_str s) : syntaxNode(nodeType::identifierNode), identifier(s) {}
-
-	bool canParseFurther() {
-		return true;
-	}
+    bool canParseFurther() {
+        return true;
+    }
 };
 
 class operatorNode : public syntaxNode {
 public:
-	
-	token operatorToken;
+    token operatorToken;
 
-	operatorNode(){}
+    operatorNode() {}
 
-	operatorNode(token op) : syntaxNode(nodeType::opNode), operatorToken(op) {
-		for (int i = 0; i < 2; i++) { addToRight(syntaxNode()); }
-	}
+    operatorNode(token op) : syntaxNode(nodeType::opNode), operatorToken(op) {
+        for (int i = 0; i < 2; i++) {
+            addToRight(new syntaxNode());
+        }
+    }
 
-	bool canParseFurther() {
-		for (int i = 0; i < 2; i++) {
-			if (childNodes[i].type != nodeType::literalNode && childNodes[i].type != nodeType::identifierNode) {
-				return true;
-			}
-		}
-		return false;
-	}
+    bool canParseFurther() {
+        for (int i = 0; i < 2; i++) {
+            if (childNodes[i]->type != nodeType::literalNode && childNodes[i]->type != nodeType::identifierNode) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	syntaxNode* getValue1() {
-		return &(childNodes[0]);
-	}
+    syntaxNode* getValue1() {
+        return childNodes[0];
+    }
 
-	syntaxNode* getValue2() {
-		return &(childNodes[1]);
-	}
+    syntaxNode* getValue2() {
+        return childNodes[1];
+    }
 };
 
 class keywordNode : public syntaxNode {
 public:
+    token keywordToken;
 
-	token keywordToken;
+    keywordNode(token kw) : syntaxNode(nodeType::keywordNode), keywordToken(kw) {
+        switch (keywordToken.subtype) {
+        case IDENTIFIER_FOR:
+            childNodes.push_back(new syntaxNode(nodeType::preconditionStatement));
+            childNodes.push_back(new syntaxNode(nodeType::comparisonStatement));
+            childNodes.push_back(new syntaxNode(nodeType::iteratorStatement));
+            childNodes.push_back(new syntaxNode(nodeType::bodyStatement));
+            break;
+        default:
+            childNodes.push_back(new syntaxNode(nodeType::comparisonStatement));
+            childNodes.push_back(new syntaxNode(nodeType::bodyStatement));
+        }
+    }
 
-	keywordNode(token kw) : syntaxNode(nodeType::keywordNode), keywordToken(kw) {
-		switch (keywordToken.subtype) {
-		case IDENTIFIER_FOR:
-			childNodes.push_back(syntaxNode(nodeType::preconditionStatement));
-			childNodes.push_back(syntaxNode(nodeType::comparisonStatement));
-			childNodes.push_back(syntaxNode(nodeType::iteratorStatement));
-			childNodes.push_back(syntaxNode(nodeType::bodyStatement));
-		default:
-			childNodes.push_back(syntaxNode(nodeType::comparisonStatement));
-			childNodes.push_back(syntaxNode(nodeType::bodyStatement));
-		}
-	}
+    bool canParseFurther() {
+        return true;
+    }
 
-	bool canParseFurther() {
-		return true;
-	}
+    syntaxNode* getCondition() {
+        switch (keywordToken.subtype) {
+        case IDENTIFIER_FOR:
+            return childNodes[1];
+        default:
+            return childNodes[0];
+        }
+    }
 
-public:
-	syntaxNode* getCondition() {
-		switch (keywordToken.subtype) {
-			case IDENTIFIER_FOR:
-				return &(childNodes[1]);
-			default:
-				return &(childNodes[0]);
-		}
-	}
+    syntaxNode* getIterator() {
+        switch (keywordToken.subtype) {
+        case IDENTIFIER_FOR:
+            return childNodes[2];
+        default:
+            return nullptr;
+        }
+    }
 
-	syntaxNode* getIterator() {
-		switch (keywordToken.subtype) {
-		case IDENTIFIER_FOR:
-			return &(childNodes[2]);
-		default:
-			return nullptr;
-		}
-	}
+    syntaxNode* getPrecondition() {
+        switch (keywordToken.subtype) {
+        case IDENTIFIER_FOR:
+            return childNodes[0];
+        default:
+            return nullptr;
+        }
+    }
 
-	syntaxNode* getPrecondition() {
-		switch (keywordToken.subtype) {
-		case IDENTIFIER_FOR:
-			return &(childNodes[0]);
-		default:
-			return nullptr;
-		}
-	}
-
-	syntaxNode* getBody() {
-		switch (keywordToken.subtype) {
-		case IDENTIFIER_FOR:
-			return &(childNodes[3]);
-		default:
-			return &(childNodes[1]);
-		}
-	}
+    syntaxNode* getBody() {
+        switch (keywordToken.subtype) {
+        case IDENTIFIER_FOR:
+            return childNodes[3];
+        default:
+            return childNodes[1];
+        }
+    }
 };
 
 void setTokenSrc(std::list<token_str> s);
 
 syntaxNode* parseExpression(const int startIndex, const int endIndex);
+
+syntaxNode* parseExpression2(const int startIndex, const int endIndex);
+
+void printNode(const syntaxNode* node);

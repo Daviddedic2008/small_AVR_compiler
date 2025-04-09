@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\c_style_compiler_avr.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:c_style_compiler_avr.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\src.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:src.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:parser.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\src.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:src.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\c_style_compiler_avr.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:c_style_compiler_avr.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:fileToString.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -23,20 +27,19 @@
       "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:tokenizer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:fileToString.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\out.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:out.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:tokenizer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.42.34433\\crt\\src\\vcruntime\\throw_bad_alloc.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:fileToString.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\out.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C581ACF0-EBBE-4478-8214-B5DD803367F7}|c_style_compiler_avr.vcxproj|solutionrelative:out.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files (x86)\\Steam\\steamapps\\common\\U3DS\\Servers\\Default\\WorkshopDownloadConfig.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
@@ -55,7 +58,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 13,
           "Children": [
             {
               "$type": "Bookmark",
@@ -63,11 +66,19 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "throw_bad_alloc.cpp",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.42.34433\\crt\\src\\vcruntime\\throw_bad_alloc.cpp",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.42.34433\\crt\\src\\vcruntime\\throw_bad_alloc.cpp",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.42.34433\\crt\\src\\vcruntime\\throw_bad_alloc.cpp",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.42.34433\\crt\\src\\vcruntime\\throw_bad_alloc.cpp",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAACIAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-04-08T00:17:40.656Z"
             },
             {
               "$type": "Document",
@@ -77,14 +88,14 @@
               "RelativeDocumentMoniker": "parser.cpp",
               "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.cpp",
               "RelativeToolTip": "parser.cpp",
-              "ViewState": "AgIAABkAAAAAAAAAAAAAwBcAAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAAOUAAAAAAAAAAAAmwP0AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-01-30T18:38:51.941Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "WorkshopDownloadConfig.json",
               "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\U3DS\\Servers\\Default\\WorkshopDownloadConfig.json",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files (x86)\\Steam\\steamapps\\common\\U3DS\\Servers\\Default\\WorkshopDownloadConfig.json",
@@ -96,7 +107,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "Config.json",
               "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\U3DS\\Servers\\Default\\Config.json",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files (x86)\\Steam\\steamapps\\common\\U3DS\\Servers\\Default\\Config.json",
@@ -108,7 +119,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "xstring",
               "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.42.34433\\include\\xstring",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.42.34433\\include\\xstring",
@@ -120,13 +131,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "c_style_compiler_avr.cpp",
               "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\c_style_compiler_avr.cpp",
               "RelativeDocumentMoniker": "c_style_compiler_avr.cpp",
-              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\c_style_compiler_avr.cpp*",
-              "RelativeToolTip": "c_style_compiler_avr.cpp*",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAB8AAAARAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\c_style_compiler_avr.cpp",
+              "RelativeToolTip": "c_style_compiler_avr.cpp",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAB4AAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-01-28T13:24:08.215Z",
               "EditorCaption": ""
@@ -141,51 +152,50 @@
               "RelativeToolTip": "fileToString.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAA8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-01-29T06:29:28.647Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-29T06:29:28.647Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "parser.h",
               "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.h",
               "RelativeDocumentMoniker": "parser.h",
               "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\parser.h",
               "RelativeToolTip": "parser.h",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAwDsAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAAJsAAAAAAAAAAAAAAKcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-01-30T18:38:58.753Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "tokenizer.h",
               "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.h",
               "RelativeDocumentMoniker": "tokenizer.h",
               "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.h",
               "RelativeToolTip": "tokenizer.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAZAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-01-28T13:24:50.356Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "tokenizer.cpp",
               "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.cpp",
               "RelativeDocumentMoniker": "tokenizer.cpp",
               "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\tokenizer.cpp",
               "RelativeToolTip": "tokenizer.cpp",
-              "ViewState": "AgIAANsAAAAAAAAAAAAjwPsAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAAP8AAAAAAAAAAAAAAPsAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-01-28T17:45:06.383Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "fileToString.cpp",
               "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\fileToString.cpp",
               "RelativeDocumentMoniker": "fileToString.cpp",
@@ -198,20 +208,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "src.txt",
               "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\src.txt",
               "RelativeDocumentMoniker": "src.txt",
               "ToolTip": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\src.txt",
               "RelativeToolTip": "src.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
               "WhenOpened": "2025-01-29T17:19:11.744Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "out.txt",
               "DocumentMoniker": "C:\\Users\\david\\OneDrive\\Documents\\c_style_compiler_avr\\out.txt",
               "RelativeDocumentMoniker": "out.txt",
@@ -219,8 +229,7 @@
               "RelativeToolTip": "out.txt",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-01-29T17:19:22.565Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-29T17:19:22.565Z"
             }
           ]
         }

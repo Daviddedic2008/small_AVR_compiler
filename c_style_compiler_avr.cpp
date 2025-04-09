@@ -25,9 +25,12 @@ int main()
     printf("\n\n");
 
     setTokenSrc(returnTokenList());
-    syntaxNode* n = parseExpression(0, 10);
 
-    n->printNode();
+    //parseExpression2(0, 100);
+
+    syntaxNode* n = parseExpression2(0, 100);
+
+    printNode(n);
 
     printf("\n");
 
