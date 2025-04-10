@@ -13,7 +13,41 @@ token currentNodeStructure[2];
 std::list<token_str>::iterator tokenSrcIterator;
 int currentIndex, currentIndexArr;
 
-const char opValues[] = { 0, 0, 0, 0, 1, 1, 2, 2 };
+const char opValues[] = {
+    1, // += (lowest precedence)
+    1, // -=
+    1, // *=
+    1, // = 
+    2, // +
+    2, // -
+    3, // *
+    3, // /
+    2, // ==
+    2, // >
+    2, // <
+    2, // >=
+    2, // <=
+    4, // ++
+    4  // --
+};
+
+const char* operatorStrings[] = {
+    "+=",  // OP_PLUS_EQUALS
+    "-=",  // OP_MINUS_EQUALS
+    "*=",  // OP_MUL_EQUALS
+    "=",   // OP_EQUALS
+    "+",   // OP_PLUS
+    "-",   // OP_MINUS
+    "*",   // OP_MUL
+    "/",   // OP_DIV
+    "==",  // OP_EQUALS_EQUALS
+    ">",   // OP_GREATER
+    "<",   // OP_LESS
+    ">=",  // OP_GREATER_EQUAL
+    "<=",  // OP_LESS_EQUAL
+    "++",  // OP_INCREMENT
+    "--"   // OP_DECREMENT
+};
 
 void setTokenSrc(std::list<token_str> s) {
     tokenSrc = s;
@@ -195,26 +229,43 @@ syntaxNode* parseExpression2(const int startIndex, const int endIndex) {
     setArrayPosition(startIndex);
 
     // first: index of op. second: precedence value (greater means higher precedence)
-    token t = eatTokenArr().t;
+    token_str t = eatTokenArr();
+
+    int allocSz = -1;
+
+    if (t.t.type == TYPE_TOKEN) {
+        allocSz = (t.t.subtype == TYPE_INT) ? 4 : 1;
+    }
 
     int currentPrecedenceAddon = 0;
 
-    for (int i = startIndex; i < endIndex; i++, t = eatTokenArr().t) {
-        switch (t.type) {
+    int currentSigToken = 0;
+
+    std::vector<token_str> sigTokens;
+
+    for (int i = startIndex; i < endIndex; i++, t = eatTokenArr()) {
+        switch (t.t.type) {
             int val;
         case CLAMP_TOKEN:
-            currentPrecedenceAddon += (t.subtype == CLAMP_PARANTHESES_L) * 5;
-            currentPrecedenceAddon -= (t.subtype == CLAMP_PARANTHESES_R) * 5;
+            currentPrecedenceAddon += (t.t.subtype == CLAMP_PARANTHESES_L) * 5;
+            currentPrecedenceAddon -= (t.t.subtype == CLAMP_PARANTHESES_R) * 5;
             break;
+        case TYPE_TOKEN:
+            break;
+        
         case OPERATION_TOKEN:
-            val = opValues[t.subtype];
-            operatorPrecedence[i] = val + currentPrecedenceAddon;
+            val = opValues[t.t.subtype];
+            operatorPrecedence[currentSigToken] = val + currentPrecedenceAddon;
+            sigTokens.push_back(t);
+            currentSigToken++;
             break;
         default:
+            sigTokens.push_back(t);
+            currentSigToken++;
             ;
         }
 
-        if (t.type == END_LINE_TOKEN) {
+        if (t.t.type == END_LINE_TOKEN) {
             break;
         }
     }
@@ -225,19 +276,21 @@ syntaxNode* parseExpression2(const int startIndex, const int endIndex) {
         return (a.second == b.second) ? (a.first < b.first) : (a.second > b.second);
         });
 
-    int* takenTokens = new int[endIndex - startIndex];
-    memset(takenTokens, -1, sizeof(int) * (endIndex - startIndex));
+    int* takenTokens = new int[sigTokens.size()];
+    memset(takenTokens, -1, sizeof(int) * sigTokens.size());
 
     std::vector<syntaxNode*> nodesOfOps(vecOp.size(), nullptr);
     int i2 = 0;
 
     for (auto it = vecOp.begin(); it != vecOp.end(); it++, i2++) {
-        operatorNode* tmp = new operatorNode(tokensRandomAccessArray[it->first].t);
+        operatorNode* tmp = new operatorNode(sigTokens[it->first].t);
+        
+        if (tmp->operatorToken.subtype == OP_EQUALS) {
+            tmp->allocSize = allocSz;
+        }
 
-        const int leftTokenId = findNextSignificantTokenIndexLeft(startIndex, it->first, endIndex);
-        const int rightTokenId = findNextSignificantTokenIndexRight(startIndex, it->first, endIndex);
-
-        printf("%d\n", rightTokenId);
+        const int leftTokenId = it->first - 1;
+        const int rightTokenId = it->first + 1;
         
         int nextNodePlace = -1;
         int dir = 0;
@@ -246,28 +299,32 @@ syntaxNode* parseExpression2(const int startIndex, const int endIndex) {
             dir = nextNodePlace - it->first;
         }
 
-        if (takenTokens[leftTokenId - startIndex] != -1) {
-            const int takenBy = takenTokens[leftTokenId - startIndex];
+        if (takenTokens[leftTokenId] != -1) {
+            const int takenBy = takenTokens[leftTokenId];
             tmp->childNodes[0] = nodesOfOps[takenBy];
-            for (int iterator = leftTokenId; takenTokens[iterator - startIndex] == takenBy && iterator >= startIndex; iterator--) {
-                takenTokens[iterator - startIndex] = i2;
+            for (int iterator = 0; iterator < sigTokens.size(); iterator++) {
+                if (takenTokens[iterator] == takenBy) {
+                    takenTokens[iterator] = i2;
+                }
             }
         }
         else {
-            tmp->childNodes[0] = getVarNodeFromToken(tokensRandomAccessArray[leftTokenId]);
-            takenTokens[leftTokenId - startIndex] = i2;
+            tmp->childNodes[0] = getVarNodeFromToken(sigTokens[leftTokenId]);
+            takenTokens[leftTokenId] = i2;
         }
 
-        if (takenTokens[rightTokenId - startIndex] != -1) {
-            const int takenBy = takenTokens[rightTokenId - startIndex];
+        if (takenTokens[rightTokenId] != -1) {
+            const int takenBy = takenTokens[rightTokenId];
             tmp->childNodes[1] = nodesOfOps[takenBy];
-            for (int iterator = rightTokenId; takenTokens[iterator - startIndex] == takenBy && iterator < endIndex; iterator++) {
-                takenTokens[iterator - startIndex] = i2;
+            for (int iterator = 0; iterator < sigTokens.size(); iterator++) {
+                if (takenTokens[iterator] == takenBy) {
+                    takenTokens[iterator] = i2;
+                }
             }
         }
         else {
-            tmp->childNodes[1] = getVarNodeFromToken(tokensRandomAccessArray[rightTokenId]);
-            takenTokens[rightTokenId - startIndex] = i2;
+            tmp->childNodes[1] = getVarNodeFromToken(sigTokens[rightTokenId]);
+            takenTokens[rightTokenId] = i2;
         }
 
         nodesOfOps[i2] = tmp;
@@ -283,13 +340,16 @@ void printNode(const syntaxNode* node) {
     printf("[ ");
 
     if (auto literal = dynamic_cast<const literalNode*>(node)) {
-        printf(" literal %d ", literal->value);
+        printf(" %d ", literal->value);
     }
     else if (auto identifier = dynamic_cast<const identifierNode*>(node)) {
-        printf(" identifier %s ", identifier->identifier.str.c_str());
+        printf(" %s ", identifier->identifier.str.c_str());
     }
     else if (auto opNode = dynamic_cast<const operatorNode*>(node)) {
-        printf(" op %d ", opNode->operatorToken.subtype);
+        printf(" %s ", operatorStrings[opNode->operatorToken.subtype]);
+        if (opNode->allocSize != -1) {
+            printf(" alloc %d bytes ", opNode->allocSize);
+        }
         // print child nodes
         for (const auto child : opNode->childNodes) {
             printNode(child);

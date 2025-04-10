@@ -127,12 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="assembler.cpp" />
     <ClCompile Include="c_style_compiler_avr.cpp" />
     <ClCompile Include="fileToString.cpp" />
     <ClCompile Include="parser.cpp" />
     <ClCompile Include="tokenizer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="assembler.h" />
     <ClInclude Include="fileToString.h" />
     <ClInclude Include="parser.h" />
     <ClInclude Include="tokenizer.h" />

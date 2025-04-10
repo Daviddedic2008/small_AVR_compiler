@@ -25,6 +25,8 @@ public:
         }
     }
 
+    int allocSize = -1; // only positive when a new var is being allocated DIRECTLY in this node(no sub-nodes)
+
     nodeType type;
 
     syntaxNode() : type(nodeType::uninitialized) {}
