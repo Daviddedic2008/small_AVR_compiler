@@ -121,70 +121,6 @@ nodeType getTypeOfNextNode(int startIndex, int endIndex) {
     return nodeType::uninitialized;
 }
 
-syntaxNode* parseExpressionNode(const int startIndex, const int endIndex) {
-    const int oldPos = currentIndexArr;
-    setArrayPosition(startIndex);
-    operatorNode* ret = new operatorNode();
-
-    token_str curToken = tokensRandomAccessArray[startIndex];
-    token_str nextToken = tokensRandomAccessArray[startIndex + 1];
-
-    switch (nextToken.t.type) {
-    case END_LINE_TOKEN:
-        delete ret;
-        switch (curToken.t.type) {
-        case CONSTANT_TOKEN: {
-            literalNode* ret2 = new literalNode(std::stoi(curToken.str));
-            return ret2;
-        }
-        case NAME_TOKEN: {
-            identifierNode* ret3 = new identifierNode(curToken);
-            return ret3;
-        }
-        default: {
-            syntaxNode* ret4 = new syntaxNode(nodeType::uninitialized);
-            return ret4;
-        }
-        }
-        break;
-
-    case OPERATION_TOKEN:
-        delete ret;
-        ret = new operatorNode(nextToken.t);
-
-        ret->childNodes[0] = (curToken.t.type == NAME_TOKEN)
-            ? static_cast<syntaxNode*>(new identifierNode(curToken))
-            : static_cast<syntaxNode*>(new literalNode(std::stoi(curToken.str)));
-
-        token_str tokenTmp = tokensRandomAccessArray[startIndex + 2];
-        if (tokenTmp.t.type == END_LINE_TOKEN) {
-            if (tokenTmp.t.subtype > 12) {
-                // inc or dec
-                ret->childNodes[1] = new literalNode(0);
-            }
-            break;
-        }
-
-        ret->childNodes[1] = parseExpressionNode(startIndex + 2, endIndex);
-        break;
-    }
-    return ret;
-}
-
-syntaxNode* parseExpression(const int startIndex, const int endIndex) {
-    // assume startIndex is on variable/literal
-    setArrayPosition(startIndex + 1);
-
-    token_str varToken = eatTokenArr();
-    token_str opToken = spitTokenArr();
-
-    operatorNode* ret = new operatorNode(opToken.t);
-    ret->childNodes[0] = new identifierNode(varToken);
-    ret->childNodes[1] = parseExpressionNode(startIndex + 2, endIndex);
-
-    return ret;
-}
-
 int findNextSignificantTokenIndexRight(const int startIndex, int index, const int endIndex) {
     index += 1;
     token_str tmp = tokensRandomAccessArray[index];
@@ -223,7 +159,7 @@ syntaxNode* getVarNodeFromToken(const token_str& t) {
     }
 }
 
-syntaxNode* parseExpression2(const int startIndex, const int endIndex) {
+syntaxNode* parseExpression(const int startIndex, const int endIndex) {
     std::unordered_map<int, int> operatorPrecedence;
 
     setArrayPosition(startIndex);
@@ -247,12 +183,13 @@ syntaxNode* parseExpression2(const int startIndex, const int endIndex) {
         switch (t.t.type) {
             int val;
         case CLAMP_TOKEN:
+
             currentPrecedenceAddon += (t.t.subtype == CLAMP_PARANTHESES_L) * 5;
             currentPrecedenceAddon -= (t.t.subtype == CLAMP_PARANTHESES_R) * 5;
             break;
         case TYPE_TOKEN:
             break;
-        
+
         case OPERATION_TOKEN:
             val = opValues[t.t.subtype];
             operatorPrecedence[currentSigToken] = val + currentPrecedenceAddon;
@@ -265,9 +202,10 @@ syntaxNode* parseExpression2(const int startIndex, const int endIndex) {
             ;
         }
 
-        if (t.t.type == END_LINE_TOKEN) {
+        if (t.t.type == END_LINE_TOKEN || (t.t.type == CLAMP_TOKEN && t.t.subtype == CLAMP_SQUIGGLY_BRACKETS_L)) {
             break;
         }
+
     }
 
     std::vector<std::pair<int, int>> vecOp(operatorPrecedence.begin(), operatorPrecedence.end());
@@ -276,6 +214,8 @@ syntaxNode* parseExpression2(const int startIndex, const int endIndex) {
         return (a.second == b.second) ? (a.first < b.first) : (a.second > b.second);
         });
 
+
+    
     int* takenTokens = new int[sigTokens.size()];
     memset(takenTokens, -1, sizeof(int) * sigTokens.size());
 
@@ -335,17 +275,125 @@ syntaxNode* parseExpression2(const int startIndex, const int endIndex) {
     return nodesOfOps[vecOp.size() - 1];
 }
 
+syntaxNode* parseChunk(int startBody, const int endBody) {
+    syntaxNode* ret = new syntaxNode(nodeType::bodyStatement);
+
+    std::vector<int> locationsOfEndlines;
+
+    locationsOfEndlines.push_back(startBody - 1);
+
+    int br = 0;
+
+    for (token_str t = tokensRandomAccessArray[startBody]; startBody < endBody; startBody++, t = tokensRandomAccessArray[startBody]) {
+
+        if ((t.t.type == END_LINE_TOKEN && br == 0) || (t.t.type == CLAMP_TOKEN && t.t.subtype == CLAMP_SQUIGGLY_BRACKETS_R)) {
+            locationsOfEndlines.push_back(startBody);
+        }
+
+        br += (t.t.type == CLAMP_TOKEN) * ((t.t.subtype == CLAMP_SQUIGGLY_BRACKETS_L) * -1 + (t.t.subtype == CLAMP_SQUIGGLY_BRACKETS_R));
+    }
+    locationsOfEndlines.push_back(startBody + 1);
+
+    std::vector<nodeType> typesOfExpr;
+
+    for (int i = 0; i < locationsOfEndlines.size() - 1 + (locationsOfEndlines.size() == 1); i++) {
+        switch (tokensRandomAccessArray[locationsOfEndlines[i] + 1].t.type) {
+        case NAME_TOKEN:
+            typesOfExpr.push_back(nodeType::opNode);
+            ret->childNodes.push_back(parseExpression(locationsOfEndlines[i] + 1, locationsOfEndlines[i + 1]));
+            break;
+        case TYPE_TOKEN:
+            typesOfExpr.push_back(nodeType::opNode);
+            ret->childNodes.push_back(parseExpression(locationsOfEndlines[i] + 1, locationsOfEndlines[i + 1]));
+            break;
+        case IDENTIFIER_TOKEN:
+            typesOfExpr.push_back(nodeType::keywordNode);
+
+            ret->childNodes.push_back(parseIf(locationsOfEndlines[i] + 1, locationsOfEndlines[i + 1] - 1));
+            break;
+        }
+    }
+
+    return ret;
+}
+
+syntaxNode* parseIf(const int startIndex, const int endIndex) {
+
+    token_str currentToken = tokensRandomAccessArray[startIndex];
+
+    keywordNode* ret = new keywordNode(currentToken.t);
+
+    const int startExpression = startIndex + 1;
+    
+    int endExpression = startExpression;
+
+    for(token t = tokensRandomAccessArray[startExpression].t; t.type != CLAMP_TOKEN && t.subtype != CLAMP_SQUIGGLY_BRACKETS_L; endExpression++, t = tokensRandomAccessArray[endExpression].t){}
+
+    syntaxNode* tmpOp = parseExpression(startExpression, endExpression);
+
+    ret->childNodes[0] = tmpOp;
+
+    int startBody = endExpression+1;
+
+    int endBody = startBody+1;
+
+    int br = 0;
+
+    for (token_str t = tokensRandomAccessArray[startBody]; t.t.type != CLAMP_TOKEN || t.t.subtype != CLAMP_SQUIGGLY_BRACKETS_R || br != 0; endBody++, t = tokensRandomAccessArray[endBody]) {
+
+        br += (t.t.type == CLAMP_TOKEN) * ((t.t.subtype == CLAMP_SQUIGGLY_BRACKETS_L) * -1 + (t.t.subtype == CLAMP_SQUIGGLY_BRACKETS_R));
+    }
+    
+    ret->childNodes[1] = parseChunk(startBody, endBody);
+
+    return ret;
+}
+
+syntaxNode* parseFor(const int startIndex, const int endIndex) {
+    token_str currentToken = tokensRandomAccessArray[startIndex];
+
+    keywordNode* ret = new keywordNode(currentToken.t);
+
+    const int startExpression = startIndex + 1;
+
+    int endExpression = startExpression;
+
+    for (token t = tokensRandomAccessArray[startExpression].t; t.type != CLAMP_TOKEN && t.subtype != CLAMP_SQUIGGLY_BRACKETS_L; endExpression++, t = tokensRandomAccessArray[endExpression].t) {}
+
+    syntaxNode* tmpOp = parseExpression(startExpression, endExpression);
+
+    ret->childNodes[0] = tmpOp;
+
+    int startBody = endExpression + 1;
+
+    int endBody = startBody + 1;
+
+    int br = 0;
+
+    for (token_str t = tokensRandomAccessArray[startBody]; t.t.type != CLAMP_TOKEN || t.t.subtype != CLAMP_SQUIGGLY_BRACKETS_R || br != 0; endBody++, t = tokensRandomAccessArray[endBody]) {
+
+        br += (t.t.type == CLAMP_TOKEN) * ((t.t.subtype == CLAMP_SQUIGGLY_BRACKETS_L) * -1 + (t.t.subtype == CLAMP_SQUIGGLY_BRACKETS_R));
+    }
+
+    ret->childNodes[1] = parseChunk(startBody, endBody);
+
+    return ret;
+}
+
 void printNode(const syntaxNode* node) {
 
     printf("[ ");
 
-    if (auto literal = dynamic_cast<const literalNode*>(node)) {
+    if (node->type == nodeType::literalNode) {
+        auto literal = dynamic_cast<const literalNode*>(node);
         printf(" %d ", literal->value);
     }
-    else if (auto identifier = dynamic_cast<const identifierNode*>(node)) {
+    else if (node->type == nodeType::identifierNode) {
+        auto identifier = dynamic_cast<const identifierNode*>(node);
         printf(" %s ", identifier->identifier.str.c_str());
     }
-    else if (auto opNode = dynamic_cast<const operatorNode*>(node)) {
+    else if (node->type == nodeType::opNode) {
+        auto opNode = dynamic_cast<const operatorNode*>(node);
         printf(" %s ", operatorStrings[opNode->operatorToken.subtype]);
         if (opNode->allocSize != -1) {
             printf(" alloc %d bytes ", opNode->allocSize);
@@ -354,7 +402,34 @@ void printNode(const syntaxNode* node) {
         for (const auto child : opNode->childNodes) {
             printNode(child);
         }
+        
+    }
+
+    else if (node->type == nodeType::keywordNode) {
+        auto keyNode = dynamic_cast<const keywordNode*>(node);
+        printf(" %s ", "if");
+        for (const auto child : keyNode->childNodes) {
+            if (child->type != nodeType::uninitialized) {
+                printNode(child);
+            }
+        }
+    }
+
+    else if (node->type == nodeType::bodyStatement) {
+        printf("\n");
+        printf(" body ");
+        for (const auto child : node->childNodes) {
+            if (child->type != nodeType::uninitialized) {
+                printNode(child);
+            }
+        }
     }
 
     printf("]");
+    printf("\n");
+}
+
+syntaxNode* parseTokens() {
+    syntaxNode* ret = parseChunk(0, tokenSrc.size()-1);
+    return ret;
 }

@@ -135,19 +135,19 @@ skpdigit:
 		return token(OPERATION_TOKEN, OP_MUL_EQUALS);
 	}
 	if (strcmpd(str, ">")) {
-		return token(COMPARISON_TOKEN, COMPARISON_GR);
+		return token(OPERATION_TOKEN, OP_GREATER);
 	}
 	if (strcmpd(str, ">=")) {
-		return token(COMPARISON_TOKEN, COMPARISON_GE);
+		return token(OPERATION_TOKEN, OP_GREATER_EQUAL);
 	}
 	if (strcmpd(str, "<")) {
-		return token(COMPARISON_TOKEN, COMPARISON_LW);
+		return token(OPERATION_TOKEN, OP_LESS);
 	}
 	if (strcmpd(str, "<=")) {
-		return token(COMPARISON_TOKEN, COMPARISON_LE);
+		return token(OPERATION_TOKEN, OP_LESS_EQUAL);
 	}
 	if (strcmpd(str, "==")) {
-		return token(COMPARISON_TOKEN, COMPARISON_EQ);
+		return token(OPERATION_TOKEN, OP_EQUALS_EQUALS);
 	}
 	if (strcmpd(str, "(")) {
 		return token(CLAMP_TOKEN, CLAMP_PARANTHESES_L);
@@ -179,8 +179,8 @@ skpdigit:
 	if (strcmpd(str, "if")) {
 		return token(IDENTIFIER_TOKEN, IDENTIFIER_IF);
 	}
-	if (strcmpd(str, "or")) {
-		return token(IDENTIFIER_TOKEN, IDENTIFIER_OR);
+	if (strcmpd(str, "while")) {
+		return token(IDENTIFIER_TOKEN, IDENTIFIER_WHILE);
 	}
 	if (strcmpd(str, "for")) {
 		return token(IDENTIFIER_TOKEN, IDENTIFIER_FOR);

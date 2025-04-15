@@ -47,6 +47,11 @@ public:
         childNodes.insert(childNodes.begin() + index, n);
     }
 
+    void reallocChild(syntaxNode* n, int index) {
+        delete childNodes[index];
+        childNodes[index] = n;
+    }
+
 };
 
 class literalNode : public syntaxNode {
@@ -78,8 +83,9 @@ public:
     operatorNode() {}
 
     operatorNode(token op) : syntaxNode(nodeType::opNode), operatorToken(op) {
+        syntaxNode* tmp = nullptr;
         for (int i = 0; i < 2; i++) {
-            addToRight(new syntaxNode());
+            addToRight(tmp);
         }
     }
 
@@ -106,16 +112,18 @@ public:
     token keywordToken;
 
     keywordNode(token kw) : syntaxNode(nodeType::keywordNode), keywordToken(kw) {
+        syntaxNode* tmp = nullptr;
         switch (keywordToken.subtype) {
+            
         case IDENTIFIER_FOR:
-            childNodes.push_back(new syntaxNode(nodeType::preconditionStatement));
-            childNodes.push_back(new syntaxNode(nodeType::comparisonStatement));
-            childNodes.push_back(new syntaxNode(nodeType::iteratorStatement));
-            childNodes.push_back(new syntaxNode(nodeType::bodyStatement));
+            childNodes.push_back(tmp);
+            childNodes.push_back(tmp);
+            childNodes.push_back(tmp);
+            childNodes.push_back(tmp);
             break;
         default:
-            childNodes.push_back(new syntaxNode(nodeType::comparisonStatement));
-            childNodes.push_back(new syntaxNode(nodeType::bodyStatement));
+            childNodes.push_back(tmp);
+            childNodes.push_back(tmp);
         }
     }
 
@@ -164,6 +172,8 @@ void setTokenSrc(std::list<token_str> s);
 
 syntaxNode* parseExpression(const int startIndex, const int endIndex);
 
-syntaxNode* parseExpression2(const int startIndex, const int endIndex);
+syntaxNode* parseIf(const int startIndex, const int endIndex);
 
 void printNode(const syntaxNode* node);
+
+syntaxNode* parseTokens();

@@ -28,7 +28,7 @@ int main()
 
     //parseExpression2(0, 100);
 
-    syntaxNode* n = parseExpression2(0, 100);
+    syntaxNode* n = parseTokens();
 
     printNode(n);
 
