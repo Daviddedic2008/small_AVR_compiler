@@ -1,0 +1,24 @@
+#pragma once
+
+#include <vector>
+#include <cstring>
+
+extern unsigned char currentScope;
+
+struct storedVar {
+	char size; // 1 or 4 bytes (for now)
+	char startRegister; // -1 if not in regs
+	unsigned char scopeValue;
+	const char* name;
+	bool compilerGenerated; // tmp variables created by compiler are flagged to prevent naming issues
+
+	storedVar() {}
+
+	storedVar(const char sz, const const char* name, const unsigned char scopeValue = currentScope, const bool compilerGenerated = false) :
+		size(sz), name(name), scopeValue(scopeValue), compilerGenerated(compilerGenerated), startRegister(-1) {
+	}
+
+	inline bool operator==(const storedVar& v) const {
+		return size == size && (strcmp(this->name, v.name) == 0) && compilerGenerated == v.compilerGenerated;
+	}
+};
