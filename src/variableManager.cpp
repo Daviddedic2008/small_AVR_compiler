@@ -5,6 +5,8 @@
 
 #include "boardType.h"
 
+// prologue/epilogue stuff
+
 const char tempRegs[] = { 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 };
 
 bool takenTempRegs[] = { true, false, false , false, false, false, false , false , false, false, false , false , false, false, false , false, false };
@@ -18,7 +20,8 @@ std::vector<storedVar> allVariables;
 std::vector<storedVar> currentStack;
 
 void addVariable(const char* name, const char size) {
-	storedVar ret;
+	storedVar add = storedVar(size, name);
+	currentStack.push_back(add);
 }
 
 void pushVariable(storedVar& v) {
@@ -76,9 +79,18 @@ void readStackIntoRegisters(storedVar& v) {
 		szBefore += currentStack[i].size;
 	}
 
-	for(int cc = 0; sr < 17 && cc < v.size; cc = takenTempRegs[sr+cc] ? 0 : (cc + 1), sr += takenTempRegs[sr + cc] * (cc+1)) {}
+	int sr = 0;
+	bool foundSpot = false;
+	for (int cc = 0; sr+cc < 17; cc = takenTempRegs[sr + cc] ? 0 : (cc + 1), sr = takenTempRegs[sr + cc] ? (sr + cc + 1) : sr) {
+		if (cc == v.size) {
+			foundSpot = true;
+			break;
+		}
+	}
 
-	v.startRegister = sr;
+	if (foundSpot = false) {
+		throw std::exception("no no no");
+	}
 
 	for (int i = 0; i < v.size; i++) {
 		takenTempRegs[i + sr] = true;
@@ -86,8 +98,25 @@ void readStackIntoRegisters(storedVar& v) {
 	}
 }
 
-void freeStackFromRegisters(const storedVar& v) {
+void freeStackFromRegisters(storedVar& v) {
 	for (int r = v.startRegister; r < v.startRegister + v.size; r++) {
 		takenTempRegs[r] = false;
 	}
+	v.startRegister = -1;
+}
+
+void saveVariableFromRegisters(storedVar& v) {
+	const int stackIdx = findVariableInStack(v);
+
+	int szBefore = 0;
+
+	for (int i = 0; i < stackIdx; i++) {
+		szBefore += currentStack[i].size;
+	}
+
+	for (int i = 0; i < v.size; i++) {
+		sts(RAMEND - szBefore - i, v.startRegister + i);
+	}
+
+	freeStackFromRegisters(v);
 }
