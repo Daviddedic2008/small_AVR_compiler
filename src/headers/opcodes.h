@@ -12,3 +12,9 @@ void pop(const char reg);
 void sts(const unsigned int loc, const char reg);
 
 void lds(const char reg, const unsigned int loc);
+
+void rjmp(const const char* label);
+
+void jmp(const const char* label);
+
+void writeLabel(const const char* label);

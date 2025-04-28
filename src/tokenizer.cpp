@@ -6,14 +6,14 @@
 std::string src;
 int charId = 0;
 
-#define NUM_OP_CHARS 7
-char OP_CHARS[] = { '=', '-', '*', '/', '+', '<', '>' };
+#define NUM_OP_CHARS 9
+char OP_CHARS[] = { '=', '-', '*', '/', '+', '<', '>', '/', '\\'};
 
 #define NUM_COMPARISONS 5
 const char* COMPARE_OPS[NUM_COMPARISONS] = { "<", ">", "==", "<=", ">=" };
 
-#define NUM_SINGLE_CHARS 7
-char SINGLE_CHARS[] = { '(', ')', '[', ']', '{', '}', ';' };
+#define NUM_SINGLE_CHARS 9
+char SINGLE_CHARS[] = { '(', ')', '[', ']', '{', '}', ';', '/', '\\'};
 
 std::list<token_str> tokens;
 std::list<token_str>::iterator iterator;
@@ -185,6 +185,15 @@ skpdigit:
 	if (strcmpd(str, "for")) {
 		return token(IDENTIFIER_TOKEN, IDENTIFIER_FOR);
 	}
+	if (strcmpd(str, "/")) {
+		return token(OPERATION_TOKEN, OP_DEREFERENCE);
+	}
+	if (strcmpd(str, "\\")) {
+		return token(OPERATION_TOKEN, OP_REFERENCE);
+	}
+	if (strcmpd(str, "ptr")) {
+		return token(TYPE_TOKEN, TYPE_PTR);
+	}
 	return token(NAME_TOKEN, -1);
 }
 const char* token::typeToString() {
@@ -211,7 +220,7 @@ const char* token::typeToString() {
 }
 
 bool charEndToken(char c) {
-	return c == '{' || c == '}' || c == '[' || c == ']' || c == '(' || c == ')' || c == '+' || c == '-' || c == ' ' || c == '=' || c == '*' || c == '&' || c == '\n' || c == '~' || c == ';' || c == '<' || c == '>';
+	return c == '{' || c == '}' || c == '[' || c == ']' || c == '(' || c == ')' || c == '+' || c == '-' || c == ' ' || c == '=' || c == '*' || c == '&' || c == '\n' || c == '~' || c == ';' || c == '<' || c == '>' || c == '/' || c == '\\';
 }
 
 char peekAtNextChar() {

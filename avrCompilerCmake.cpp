@@ -2,7 +2,7 @@
 //
 
 #include "avrCompilerCmake.h"
-#include "src/compiler.h"
+#include "src/headers/compiler.h"
 
 using namespace std;
 

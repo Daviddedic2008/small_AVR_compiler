@@ -3,7 +3,7 @@
 #include "headers/opcodes.h"
 #include "headers/variableManager.h"
 
-#include "boardType.h"
+#include "SETUP/boardType.h"
 
 // prologue/epilogue stuff
 
@@ -79,7 +79,7 @@ void readStackIntoRegisters(storedVar& v) {
 		szBefore += currentStack[i].size;
 	}
 
-	int sr = 0;
+	sr = 0;
 	bool foundSpot = false;
 	for (int cc = 0; sr+cc < 17; cc = takenTempRegs[sr + cc] ? 0 : (cc + 1), sr = takenTempRegs[sr + cc] ? (sr + cc + 1) : sr) {
 		if (cc == v.size) {

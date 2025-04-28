@@ -19,6 +19,8 @@
 #define OP_LESS_EQUAL 12
 #define OP_INCREMENT 13
 #define OP_DECREMENT 14
+#define OP_DEREFERENCE 15
+#define OP_REFERENCE 16
 
 #define NAME_TOKEN 1
 #define NAME_VAR 0
@@ -39,6 +41,7 @@
 #define TYPE_TOKEN 4
 #define TYPE_CHAR 0
 #define TYPE_INT 1
+#define TYPE_PTR 2
 
 #define IDENTIFIER_TOKEN 5
 #define IDENTIFIER_IF 0 

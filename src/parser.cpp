@@ -17,7 +17,7 @@ const char opValues[] = {
     1, // += (lowest precedence)
     1, // -=
     1, // *=
-    1, // = 
+    1, // =
     2, // +
     2, // -
     3, // *
@@ -28,7 +28,9 @@ const char opValues[] = {
     2, // >=
     2, // <=
     4, // ++
-    4  // --
+    4, // --
+    2, // 
+    2  //
 };
 
 const char* operatorStrings[] = {
@@ -46,7 +48,9 @@ const char* operatorStrings[] = {
     ">=",  // OP_GREATER_EQUAL
     "<=",  // OP_LESS_EQUAL
     "++",  // OP_INCREMENT
-    "--"   // OP_DECREMENT
+    "--",  // OP_DECREMENT
+    "/",   // OP_DEREFERENCE
+    "\\",  // OP_REFERENCE
 };
 
 void setTokenSrc(std::list<token_str> s) {
@@ -154,6 +158,8 @@ syntaxNode* getVarNodeFromToken(const token_str& t) {
         return new literalNode(std::stoi(t.str));
     case NAME_TOKEN:
         return new identifierNode(t);
+    case OPERATION_TOKEN:
+        return new operatorNode(t.t);
     default:
         return new syntaxNode(nodeType::uninitialized);
     }
@@ -170,7 +176,7 @@ syntaxNode* parseExpression(const int startIndex, const int endIndex) {
     int allocSz = -1;
 
     if (t.t.type == TYPE_TOKEN) {
-        allocSz = (t.t.subtype == TYPE_INT) ? 4 : 1;
+        allocSz = (t.t.subtype == TYPE_INT) * 4 + (t.t.subtype == TYPE_CHAR) + (t.t.subtype == TYPE_PTR) * 2;
     }
 
     int currentPrecedenceAddon = 0;
@@ -248,6 +254,7 @@ syntaxNode* parseExpression(const int startIndex, const int endIndex) {
                 }
             }
         }
+
         else {
             tmp->childNodes[0] = getVarNodeFromToken(sigTokens[leftTokenId]);
             takenTokens[leftTokenId] = i2;
