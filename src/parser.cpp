@@ -29,8 +29,8 @@ const char opValues[] = {
     2, // <=
     4, // ++
     4, // --
-    2, // 
-    2  //
+    5, // 
+    5  //
 };
 
 const char* operatorStrings[] = {
@@ -52,6 +52,8 @@ const char* operatorStrings[] = {
     "/",   // OP_DEREFERENCE
     "\\",  // OP_REFERENCE
 };
+
+#define isSingleInput(op) (op == OP_DEREFERENCE || op == OP_REFERENCE)
 
 void setTokenSrc(std::list<token_str> s) {
     tokenSrc = s;
@@ -220,8 +222,6 @@ syntaxNode* parseExpression(const int startIndex, const int endIndex) {
         return (a.second == b.second) ? (a.first < b.first) : (a.second > b.second);
         });
 
-
-
     int* takenTokens = new int[sigTokens.size()];
     memset(takenTokens, -1, sizeof(int) * sigTokens.size());
 
@@ -235,18 +235,31 @@ syntaxNode* parseExpression(const int startIndex, const int endIndex) {
             tmp->allocSize = allocSz;
         }
 
+        
+
         const int leftTokenId = it->first - 1;
         const int rightTokenId = it->first + 1;
 
+
         int nextNodePlace = -1;
         int dir = 0;
-        if (i2 < vecOp.size() - 1) {
+
+        if(i2 < vecOp.size()-1) {
             nextNodePlace = vecOp[i2 + 1].first;
-            dir = nextNodePlace - it->first;
         }
 
+        else {
+            nextNodePlace = -1;
+        }
+
+        dir = nextNodePlace - it->first;
+
+        if (isSingleInput(tmp->operatorToken.subtype)) {
+            goto skpLeft;
+        }
         if (takenTokens[leftTokenId] != -1) {
             const int takenBy = takenTokens[leftTokenId];
+            
             tmp->childNodes[0] = nodesOfOps[takenBy];
             for (int iterator = 0; iterator < sigTokens.size(); iterator++) {
                 if (takenTokens[iterator] == takenBy) {
@@ -260,6 +273,8 @@ syntaxNode* parseExpression(const int startIndex, const int endIndex) {
             takenTokens[leftTokenId] = i2;
         }
 
+    skpLeft:;
+
         if (takenTokens[rightTokenId] != -1) {
             const int takenBy = takenTokens[rightTokenId];
             tmp->childNodes[1] = nodesOfOps[takenBy];
@@ -272,6 +287,7 @@ syntaxNode* parseExpression(const int startIndex, const int endIndex) {
         else {
             tmp->childNodes[1] = getVarNodeFromToken(sigTokens[rightTokenId]);
             takenTokens[rightTokenId] = i2;
+            takenTokens[it->first] = i2;
         }
 
         nodesOfOps[i2] = tmp;
@@ -304,6 +320,7 @@ syntaxNode* parseChunk(int startBody, const int endBody) {
     std::vector<nodeType> typesOfExpr;
 
     for (int i = 0; i < locationsOfEndlines.size() - 1 + (locationsOfEndlines.size() == 1); i++) {
+
         switch (tokensRandomAccessArray[locationsOfEndlines[i] + 1].t.type) {
         case NAME_TOKEN:
             typesOfExpr.push_back(nodeType::opNode);
@@ -318,7 +335,12 @@ syntaxNode* parseChunk(int startBody, const int endBody) {
 
             ret->childNodes.push_back(parseIf(locationsOfEndlines[i] + 1, locationsOfEndlines[i + 1] - 1));
             break;
+        case OPERATION_TOKEN:
+            typesOfExpr.push_back(nodeType::opNode);
+            ret->childNodes.push_back(parseExpression(locationsOfEndlines[i] + 1, locationsOfEndlines[i + 1]));
+            
         }
+
     }
 
     return ret;
@@ -407,6 +429,7 @@ void printNode(const syntaxNode* node) {
         }
         // print child nodes
         for (const auto child : opNode->childNodes) {
+            if (child == nullptr) { continue; }
             printNode(child);
         }
 
@@ -416,6 +439,7 @@ void printNode(const syntaxNode* node) {
         auto keyNode = dynamic_cast<const keywordNode*>(node);
         printf(" %s ", "if");
         for (const auto child : keyNode->childNodes) {
+            if (child == nullptr) { continue; }
             if (child->type != nodeType::uninitialized) {
                 printNode(child);
             }
@@ -425,6 +449,7 @@ void printNode(const syntaxNode* node) {
     else if (node->type == nodeType::bodyStatement) {
         printf(" body ");
         for (const auto child : node->childNodes) {
+            if (child == nullptr) { continue; }
             if (child->type != nodeType::uninitialized) {
                 printNode(child);
             }
