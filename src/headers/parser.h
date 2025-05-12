@@ -174,6 +174,8 @@ syntaxNode* parseExpression(const int startIndex, const int endIndex);
 
 syntaxNode* parseIf(const int startIndex, const int endIndex);
 
+syntaxNode* parseFor(const int startIndex, const int endIndex);
+
 void printNode(const syntaxNode* node);
 
 syntaxNode* parseTokens();

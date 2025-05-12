@@ -120,3 +120,16 @@ void saveVariableFromRegisters(storedVar& v) {
 
 	freeStackFromRegisters(v);
 }
+
+int referenceVariable(const storedVar& v) {
+
+	int idx = 0;
+	for (storedVar tmp : currentStack) {
+		if (tmp == v) {
+			break;
+		}
+		idx += tmp.size;
+	}
+
+	return idx;
+}

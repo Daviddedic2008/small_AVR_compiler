@@ -22,3 +22,19 @@ struct storedVar {
 		return size == size && (strcmp(this->name, v.name) == 0) && compilerGenerated == v.compilerGenerated;
 	}
 };
+
+int referenceVariable(const storedVar& v);
+
+void addVariable(const char* name, const char size);
+
+void pushVariable(storedVar& v);
+
+void decrementScope();
+
+int findVariableInStack(const storedVar& v);
+
+void readStackIntoRegisters(storedVar& v);
+
+void freeStackFromRegisters(storedVar& v);
+
+void saveVariableFromRegisters(storedVar& v);
