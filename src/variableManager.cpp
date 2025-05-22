@@ -9,9 +9,15 @@
 
 const char tempRegs[] = { 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 };
 
-bool takenTempRegs[] = { true, false, false , false, false, false, false , false , false, false, false , false , false, false, false , false, false };
+bool takenTempRegs[] = { true, true, true, false, false, false, false , false , false, false, false , false , false, false, false , false, false };
 
 #define DELETE_REG 0
+
+#define DUMP_REG 16
+
+#define TEMP_REG 17
+
+#define RESULT_REG 18
 
 unsigned char currentScope = 0;
 
@@ -63,6 +69,29 @@ int findVariableInStack(const storedVar& v) {
 	for (storedVar tmp : currentStack) {
 		ret = (tmp == v) ? idx : ret;
 		idx++;
+	}
+
+	return ret;
+}
+
+storedVar findVariableFromName(const char* name) {
+	for (const storedVar v : currentStack) {
+		if (strcmp(name, v.name) == 0) {
+			return v;
+		}
+	}
+
+	return storedVar();
+}
+
+int findDistanceFromStackStart(const storedVar& v) {
+	int ret = 0;
+
+	for (storedVar tmp : currentStack) {
+		if (tmp == v) {
+			return ret;
+		}
+		ret += tmp.size;
 	}
 
 	return ret;
@@ -132,4 +161,175 @@ int referenceVariable(const storedVar& v) {
 	}
 
 	return idx;
+}
+
+void writeValueToVariable(const storedVar& v, const unsigned int value) {
+	const int dist = findDistanceFromStackStart(v);
+	
+	for (int b = 0; b < v.size; b++) {
+		ldi(DUMP_REG, (((unsigned int)255) << (b * 8)) && value);
+		sts(RAMEND - (dist + b), DUMP_REG);
+	}
+}
+
+void writeVariableToVariable(const storedVar& dst, const storedVar& src) {
+	const int dstAddr = findDistanceFromStackStart(dst);
+	const int srcAddr = findDistanceFromStackStart(src);
+
+	const int transferSize = (dst.size < src.size) ? dst.size : src.size;
+
+	for (int b = 0; b < transferSize; b++) {
+		lds(DUMP_REG, RAMEND - (srcAddr + b));
+		sts(RAMEND - (dstAddr + b), DUMP_REG);
+	}
+}
+
+void compareVariableToImmediate(const storedVar& var, const unsigned int value) {
+	// compares whole thing. SIGNED
+	// puts result in result_reg
+
+	int addr = findDistanceFromStackStart(var);
+	int greaterSize = (var.size > 4) ? var.size : 4;
+	clr(RESULT_REG);
+
+	for (int b = 0; b < greaterSize; b++) {
+
+		if (b >= var.size) {
+			clr(DUMP_REG);
+			cpi(DUMP_REG, (((unsigned int)255) << (b * 8)) && value);
+			breq("fix later");
+
+			ldi(RESULT_REG, 1); // greater
+
+			brge("fix later 2");
+
+			ldi(RESULT_REG, -1); // lower
+
+			rjmp("fix later 2");
+
+			writeLabel("fix later");
+			
+		}
+
+		cpi(DUMP_REG, (((unsigned int)255) << (b * 8)) && value);
+		breq("fix later");
+
+		ldi(RESULT_REG, 1); // greater
+
+		brge("fix later");
+
+		ldi(RESULT_REG, -1); // lower
+
+		writeLabel("fix later 2");
+	}
+}
+
+void addToVariableImmediate(const storedVar& v, const int value) {
+	const int addr = findDistanceFromStackStart(v);
+
+	const int transferSize = (v.size < 4) ? v.size : 4;
+
+	for (int b = 0; b < transferSize; b++) {
+		lds(DUMP_REG, RAMEND - (addr + b));
+
+		ldi(TEMP_REG, (((unsigned int)255) << (b * 8)) && value);
+
+		if (b == 0) {
+			add(DUMP_REG, TEMP_REG);
+		}
+
+		else {
+			adc(DUMP_REG, TEMP_REG);
+		}
+
+		sts(RAMEND - (addr + b), DUMP_REG);
+	}
+}
+
+void addToVariableVariable(const storedVar& dst, const storedVar& src) {
+	const int addr = findDistanceFromStackStart(dst);
+
+	const int addr2 = findDistanceFromStackStart(src);
+
+	const int transferSize = (dst.size < src.size) ? dst.size : src.size;
+
+	for (int b = 0; b < transferSize; b++) {
+		lds(DUMP_REG, RAMEND - (addr + b));
+
+		lds(TEMP_REG, RAMEND - (addr2 + b));
+
+		if (b == 0) {
+			add(DUMP_REG, TEMP_REG);
+		}
+
+		else {
+			adc(DUMP_REG, TEMP_REG);
+		}
+
+		sts(RAMEND - (addr + b), DUMP_REG);
+	}
+}
+
+void multiplyVariableImmediate(const storedVar& v, const int value) {
+	const int addr = findDistanceFromStackStart(v);
+
+	const int transferSize = (v.size < 4) ? v.size : 4;
+
+	for (int b = 0; b < transferSize-1; b++) {
+		lds(DUMP_REG, RAMEND - (addr + b));
+
+		ldi(TEMP_REG, (((unsigned int)255) << (b * 8)) && value);
+
+		muls(DUMP_REG, TEMP_REG);
+
+		if (b == 0) {
+			mov(DUMP_REG, 0);
+			sts(RAMEND - (addr + b), DUMP_REG);
+			mov(DUMP_REG, 1);
+			sts(RAMEND - (addr + b + 1), DUMP_REG);
+			continue;
+		}
+
+		mov(TEMP_REG, 0);
+		add(DUMP_REG, TEMP_REG);
+		sts(RAMEND - (addr + b), DUMP_REG);
+
+		mov(TEMP_REG, 1);
+		lds(DUMP_REG, RAMEND - (addr + b + 1));
+		adc(DUMP_REG, TEMP_REG);
+		sts(RAMEND - (addr + b + 1), DUMP_REG);
+	}
+}
+
+void multiplyVariableVariable(const storedVar& dst, const storedVar& src) {
+	const int addr = findDistanceFromStackStart(dst);
+
+	const int addr2 = findDistanceFromStackStart(src);
+
+	const int transferSize = (dst.size < src.size) ? dst.size : src.size;
+
+	for (int b = 0; b < transferSize - 1; b++) {
+		lds(DUMP_REG, RAMEND - (addr + b));
+
+		lds(TEMP_REG, RAMEND - (addr2 + b));
+
+		muls(DUMP_REG, TEMP_REG);
+
+		if (b == 0) {
+			mov(DUMP_REG, 0);
+			sts(RAMEND - (addr + b), DUMP_REG);
+			mov(DUMP_REG, 1);
+			sts(RAMEND - (addr + b + 1), DUMP_REG);
+			continue;
+		}
+
+		mov(TEMP_REG, 0);
+		add(DUMP_REG, TEMP_REG);
+		sts(RAMEND - (addr + b), DUMP_REG);
+
+		mov(TEMP_REG, 1);
+		lds(DUMP_REG, RAMEND - (addr + b + 1));
+		adc(DUMP_REG, TEMP_REG);
+		sts(RAMEND - (addr + b + 1), DUMP_REG);
+	}
 }
