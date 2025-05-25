@@ -25,11 +25,15 @@ struct storedVar {
 
 int referenceVariable(const storedVar& v);
 
-void addVariable(const char* name, const char size);
+storedVar addVariable(const char* name, const char size);
+
+storedVar addVariable(const storedVar& add);
 
 void pushVariable(storedVar& v);
 
 void decrementScope();
+
+void incrementScope();
 
 int findVariableInStack(const storedVar& v);
 
@@ -38,3 +42,7 @@ void readStackIntoRegisters(storedVar& v);
 void freeStackFromRegisters(storedVar& v);
 
 void saveVariableFromRegisters(storedVar& v);
+
+void writeImmediateToVariable(const storedVar& v, const int value);
+
+void addToVariableImmediate(const storedVar& v, const int value);

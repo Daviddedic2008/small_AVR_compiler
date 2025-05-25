@@ -25,9 +25,21 @@ std::vector<storedVar> allVariables;
 
 std::vector<storedVar> currentStack;
 
-void addVariable(const char* name, const char size) {
+storedVar addVariable(const char* name, const char size) {
 	storedVar add = storedVar(size, name);
 	currentStack.push_back(add);
+	for (int i = 0; i < size; i++) {
+		push(16);
+	}
+	return add;
+}
+
+storedVar addVariable(const storedVar& add) {
+	currentStack.push_back(add);
+	for (int i = 0; i < add.size; i++) {
+		push(16);
+	}
+	return add;
 }
 
 void pushVariable(storedVar& v) {
@@ -48,13 +60,24 @@ void incrementScope() {
 void decrementScope() {
 	currentScope--;
 	int totalSize = 0;
-	for (auto v = currentStack.begin(); v != currentStack.end(); v++) {
-		if (v->scopeValue > currentScope) {
+	std::vector<int> indicesToRemove;
+
+	int idx = 0;
+	for (auto v = currentStack.begin(); v != currentStack.end(); v++, idx++) {
+		if (v->scopeValue >= currentScope) {
 			totalSize += v->size;
-			currentStack.erase(v);
+			indicesToRemove.push_back(idx);
 			continue;
 		}
 		break;
+	}
+
+	for (auto i = indicesToRemove.begin(); i != indicesToRemove.end(); i++) {
+		std::vector<storedVar>::iterator iteratorToRemove = currentStack.begin();
+
+		for(int i2 = 0; i2 != *i; i2++, iteratorToRemove++){}
+
+		currentStack.erase(iteratorToRemove);
 	}
 
 	for (int i = 0; i < totalSize; i++) {
@@ -163,11 +186,11 @@ int referenceVariable(const storedVar& v) {
 	return idx;
 }
 
-void writeValueToVariable(const storedVar& v, const unsigned int value) {
+void writeImmediateToVariable(const storedVar& v, const int value) {
 	const int dist = findDistanceFromStackStart(v);
 	
 	for (int b = 0; b < v.size; b++) {
-		ldi(DUMP_REG, (((unsigned int)255) << (b * 8)) && value);
+		ldi(DUMP_REG, (value >> (8 * b)) & 255U);
 		sts(RAMEND - (dist + b), DUMP_REG);
 	}
 }
@@ -196,7 +219,7 @@ void compareVariableToImmediate(const storedVar& var, const unsigned int value) 
 
 		if (b >= var.size) {
 			clr(DUMP_REG);
-			cpi(DUMP_REG, (((unsigned int)255) << (b * 8)) && value);
+			cpi(DUMP_REG, (((unsigned int)255) << (b * 8)) & value);
 			breq("fix later");
 
 			ldi(RESULT_REG, 1); // greater
@@ -211,7 +234,7 @@ void compareVariableToImmediate(const storedVar& var, const unsigned int value) 
 			
 		}
 
-		cpi(DUMP_REG, (((unsigned int)255) << (b * 8)) && value);
+		cpi(DUMP_REG, (((unsigned int)255) << (b * 8)) & value);
 		breq("fix later");
 
 		ldi(RESULT_REG, 1); // greater
@@ -232,7 +255,7 @@ void addToVariableImmediate(const storedVar& v, const int value) {
 	for (int b = 0; b < transferSize; b++) {
 		lds(DUMP_REG, RAMEND - (addr + b));
 
-		ldi(TEMP_REG, (((unsigned int)255) << (b * 8)) && value);
+		ldi(TEMP_REG, (((unsigned int)255) << (b * 8)) & value);
 
 		if (b == 0) {
 			add(DUMP_REG, TEMP_REG);
@@ -278,7 +301,7 @@ void multiplyVariableImmediate(const storedVar& v, const int value) {
 	for (int b = 0; b < transferSize-1; b++) {
 		lds(DUMP_REG, RAMEND - (addr + b));
 
-		ldi(TEMP_REG, (((unsigned int)255) << (b * 8)) && value);
+		ldi(TEMP_REG, (((unsigned int)255) << (b * 8)) & value);
 
 		muls(DUMP_REG, TEMP_REG);
 

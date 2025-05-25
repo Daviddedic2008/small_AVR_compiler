@@ -18,3 +18,23 @@ void rjmp(const const char* label);
 void jmp(const const char* label);
 
 void writeLabel(const const char* label);
+
+void brne(const char* label);
+
+void breq(const char* label);
+
+void brlt(const char* label);
+
+void brge(const char* label);
+
+void cpi(const char reg1, const char val);
+
+void cp(const char reg1, const char reg2);
+
+void clr(const char reg);
+
+void add(const char reg1, const char reg2);
+
+void adc(const char reg1, const char reg2);
+
+void muls(const char reg1, const char reg2);

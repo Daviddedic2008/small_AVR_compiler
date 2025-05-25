@@ -3,6 +3,7 @@
 
 #include "avrCompilerCmake.h"
 #include "src/headers/compiler.h"
+#include "src/headers/variableManager.h"
 
 using namespace std;
 
@@ -30,8 +31,14 @@ int main()
 
     syntaxNode* n = parseTokens();
 
-    printNode(n);
-
     printf("\n");
 
+    incrementScope();
+    storedVar v = storedVar(4, "v1");
+
+    
+    addVariable(v);
+    writeImmediateToVariable(v, 55);
+    addToVariableImmediate(v, 10);
+    decrementScope();
 }
