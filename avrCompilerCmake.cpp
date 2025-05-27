@@ -34,11 +34,11 @@ int main()
     printf("\n");
 
     incrementScope();
-    storedVar v = storedVar(4, "v1");
+    storedVar v = storedVar(2, "v1");
 
     
     addVariable(v);
-    writeImmediateToVariable(v, 55);
-    addToVariableImmediate(v, 10);
+    writeImmediateToVariable(v, 10);
+    multiplyVariableImmediate(v, 2);
     decrementScope();
 }

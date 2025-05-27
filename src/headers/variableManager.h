@@ -46,3 +46,5 @@ void saveVariableFromRegisters(storedVar& v);
 void writeImmediateToVariable(const storedVar& v, const int value);
 
 void addToVariableImmediate(const storedVar& v, const int value);
+
+void multiplyVariableImmediate(const storedVar& v, const int value);

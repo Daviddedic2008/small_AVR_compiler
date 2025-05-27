@@ -97,6 +97,16 @@ int findVariableInStack(const storedVar& v) {
 	return ret;
 }
 
+int getStackSize() {
+	int ret = 0;
+
+	for (auto v : currentStack) {
+		ret += v.size;
+	}
+
+	return ret;
+}
+
 storedVar findVariableFromName(const char* name) {
 	for (const storedVar v : currentStack) {
 		if (strcmp(name, v.name) == 0) {
@@ -296,31 +306,44 @@ void addToVariableVariable(const storedVar& dst, const storedVar& src) {
 void multiplyVariableImmediate(const storedVar& v, const int value) {
 	const int addr = findDistanceFromStackStart(v);
 
-	const int transferSize = (v.size < 4) ? v.size : 4;
-
-	for (int b = 0; b < transferSize-1; b++) {
+	int stacksz = getStackSize();
+	int pushedRegs = 0;
+	for (int b = 0; b < v.size; b++) {
 		lds(DUMP_REG, RAMEND - (addr + b));
+		for (int i = 0; i < 4; i++) {
+			ldi(TEMP_REG, (((unsigned int)255) << (i * 8)) & value);
+			if (i + b > v.size) { continue; }
 
-		ldi(TEMP_REG, (((unsigned int)255) << (b * 8)) & value);
-
-		muls(DUMP_REG, TEMP_REG);
-
-		if (b == 0) {
-			mov(DUMP_REG, 0);
-			sts(RAMEND - (addr + b), DUMP_REG);
-			mov(DUMP_REG, 1);
-			sts(RAMEND - (addr + b + 1), DUMP_REG);
-			continue;
+			muls(TEMP_REG, DUMP_REG);
+			if ((b + i) == 0) {
+				push(0);
+				push(1);
+				pushedRegs += 2;
+			}
+			else {
+				// RAMEND-(stacksz)-pushedRegs+1
+				push(DUMP_REG);
+				lds(DUMP_REG, RAMEND - (stacksz)-pushedRegs + 1);
+				if (pushedRegs == 2) {
+					add(DUMP_REG, 0);
+				}
+				else {
+					adc(DUMP_REG, 0);
+				}
+				sts(RAMEND - (stacksz)-pushedRegs + 1, DUMP_REG);
+				pop(DUMP_REG);
+				if ((b + i) == pushedRegs - 1) {
+					push(1);
+					pushedRegs++;
+				}
+				else {
+					push(DUMP_REG);
+					lds(DUMP_REG, RAMEND - (stacksz)-pushedRegs);
+					adc(DUMP_REG, 1);
+					sts(RAMEND - ((stacksz)-pushedRegs), DUMP_REG);
+				}
+			}
 		}
-
-		mov(TEMP_REG, 0);
-		add(DUMP_REG, TEMP_REG);
-		sts(RAMEND - (addr + b), DUMP_REG);
-
-		mov(TEMP_REG, 1);
-		lds(DUMP_REG, RAMEND - (addr + b + 1));
-		adc(DUMP_REG, TEMP_REG);
-		sts(RAMEND - (addr + b + 1), DUMP_REG);
 	}
 }
 
