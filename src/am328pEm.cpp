@@ -105,9 +105,9 @@ void cpi(const int reg1, const int val) {
 	comparisonRegister = (regs[reg1] > val) ? 1 : (regs[reg1] < val ? -1 : 0);
 }
 
-void brgt(const std::string& label) {
+void brge(const std::string& label) {
 
-	if (comparisonRegister > 0) {
+	if (comparisonRegister >= 0) {
 		int loc = -1;
 		for (auto it = labels.begin(); it != labels.end(); it++) {
 			loc = (it->first.compare(label)) ? loc : it->second;
@@ -115,6 +115,60 @@ void brgt(const std::string& label) {
 
 		currentOp = loc-1;
 	}
+}
+
+void brlt(const std::string& label) {
+
+	if (comparisonRegister < 0) {
+		int loc = -1;
+		for (auto it = labels.begin(); it != labels.end(); it++) {
+			loc = (it->first.compare(label)) ? loc : it->second;
+		}
+
+		currentOp = loc - 1;
+	}
+}
+
+void breq(const std::string& label) {
+
+	if (comparisonRegister == 0) {
+		int loc = -1;
+		for (auto it = labels.begin(); it != labels.end(); it++) {
+			loc = (it->first.compare(label)) ? loc : it->second;
+		}
+
+		currentOp = loc - 1;
+	}
+}
+
+void brne(const std::string& label) {
+
+	if (comparisonRegister != 0) {
+		int loc = -1;
+		for (auto it = labels.begin(); it != labels.end(); it++) {
+			loc = (it->first.compare(label)) ? loc : it->second;
+		}
+
+		currentOp = loc - 1;
+	}
+}
+
+void rjmp(const std::string& label) {
+	int loc = -1;
+	for (auto it = labels.begin(); it != labels.end(); it++) {
+		loc = (it->first.compare(label)) ? loc : it->second;
+	}
+
+	currentOp = loc - 1;
+}
+
+void jmp(const std::string& label) {
+	int loc = -1;
+	for (auto it = labels.begin(); it != labels.end(); it++) {
+		loc = (it->first.compare(label)) ? loc : it->second;
+	}
+
+	currentOp = loc - 1;
 }
 
 void push(const int reg) {
@@ -168,9 +222,28 @@ void runVm() {
 		case opcodeType::cp:
 			cp(op->arg1.value(), op->arg2.value());
 			break;
-		case opcodeType::brgt:
-			brgt(op->stringArg.value());
+		case opcodeType::brge:
+			brge(op->stringArg.value());
 			break;
+		case opcodeType::brlt:
+			brlt(op->stringArg.value());
+			break;
+		case opcodeType::breq:
+			breq(op->stringArg.value());
+			break;
+		case opcodeType::brne:
+			brne(op->stringArg.value());
+			break;
+		case opcodeType::push:
+			push(op->arg1.value());
+			break;
+		case opcodeType::pop:
+			pop(op->arg1.value());
+			break;
+		case opcodeType::rjmp:
+			rjmp(op->stringArg.value());
+		case opcodeType::jmp:
+			jmp(op->stringArg.value());
 		}
 
 	}
