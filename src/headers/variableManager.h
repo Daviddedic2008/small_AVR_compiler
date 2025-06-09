@@ -37,6 +37,8 @@ void incrementScope();
 
 int findVariableInStack(const storedVar& v);
 
+storedVar findVariableFromName(const char* name);
+
 void readStackIntoRegisters(storedVar& v);
 
 void freeStackFromRegisters(storedVar& v);
@@ -47,4 +49,12 @@ void writeImmediateToVariable(const storedVar& v, const int value);
 
 void addToVariableImmediate(const storedVar& v, const int value);
 
+void addToVariableVariable(const storedVar& dst, const storedVar& src);
+
 void multiplyVariableImmediate(const storedVar& v, const int value);
+
+void pushCompilerVar(const int sz);
+
+void multiplyVariableVariable(const storedVar& dst, const storedVar& src);
+
+storedVar& getLastCompilerVar();

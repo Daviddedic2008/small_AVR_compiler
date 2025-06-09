@@ -34,21 +34,9 @@ int main()
 
     setupVm();
 
-    addOpcode(opcodeType::ldi, 16, 5);
+    //runVm();
 
-    addOpcode(opcodeType::ldi, 17, 10);
-
-    addOpcode(opcodeType::cp, 16, 17);
-
-    addOpcode(opcodeType::brgt, nullopt, nullopt, "a");
-
-    addOpcode(opcodeType::ldi, 16, 1);
-
-    addLabel("a");
-
-    runVm();
-
-    printReg(16);
+    //printReg(16);
 
     //printCmp();
     

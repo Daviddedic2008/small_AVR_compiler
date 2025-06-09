@@ -18,10 +18,17 @@ enum class opcodeType {
 	add,
 	adc,
 	mul,
-	brgt,
+	brge,
+	brlt,
+	breq,
+	brne,
 	clr,
 	cpi,
 	cp,
+	pop,
+	push,
+	rjmp,
+	jmp,
 };
 
 enum flags {

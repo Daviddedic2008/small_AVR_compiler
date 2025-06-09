@@ -2,6 +2,7 @@
 #include "headers/parser.h"
 #include "headers/opcodes.h"
 #include "headers/variableManager.h"
+#include "headers/tokenizer.h"
 
 #include "SETUP/boardType.h"
 
@@ -24,6 +25,8 @@ unsigned char currentScope = 0;
 std::vector<storedVar> allVariables;
 
 std::vector<storedVar> currentStack;
+
+std::vector<int> compilerVarIdx;
 
 storedVar addVariable(const char* name, const char size) {
 	storedVar add = storedVar(size, name);
@@ -114,7 +117,7 @@ storedVar findVariableFromName(const char* name) {
 		}
 	}
 
-	return storedVar();
+	return storedVar(-1, "");
 }
 
 int findDistanceFromStackStart(const storedVar& v) {
@@ -378,4 +381,22 @@ void multiplyVariableVariable(const storedVar& dst, const storedVar& src) {
 		adc(DUMP_REG, TEMP_REG);
 		sts(RAMEND - (addr + b + 1), DUMP_REG);
 	}
+}
+
+void pushCompilerVar(const int sz) {
+	std::string tmp = " " + std::to_string(compilerVarIdx.size());
+	const storedVar t = addVariable(tmp.c_str(), sz);
+
+	compilerVarIdx.push_back(findVariableInStack(t));
+}
+
+storedVar& getLastCompilerVar() {
+	return currentStack[compilerVarIdx[compilerVarIdx.size() - 1]];
+}
+
+storedVar popCompilerVar() {
+	storedVar tmp = getLastCompilerVar();
+	currentStack.erase(currentStack.begin() + compilerVarIdx[compilerVarIdx.size() - 1]);
+	compilerVarIdx.pop_back();
+	return tmp;
 }
