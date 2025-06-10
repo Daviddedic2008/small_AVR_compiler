@@ -46,32 +46,36 @@ struct modifiableValue {
 };
 
 void convertOp(modifiableValue& v1, modifiableValue& v2, token op) {
-	bool pushResult = true;
 
-	const int lowerSz = (v1.imm * 4 + !v1.imm * v1.v.size) < (v2.imm * 4 + !v2.imm * v2.v.size) ? (v1.imm * 4 + !v1.imm * v1.v.size) : ;
-	pushCompilerVar()
+	
 
 	switch (op.subtype) {
+	case OP_EQUALS:
+		if (v2.imm) {
+			writeImmediateToVariable(v1.v, v2.value.value());
+			break;
+		}
+		writeVariableToVariable(v1.v, v2.v);
+		break;
+		const int lowerSz = (v1.imm * 4 + !v1.imm * v1.v.size) < (v2.imm * 4 + !v2.imm * v2.v.size) ? (v1.imm * 4 + !v1.imm * v1.v.size) : (v2.imm * 4 + !v2.imm * v2.v.size);
+		pushCompilerVar(lowerSz);
 	case OP_PLUS:
-
-		if (v2.imm) {
-			addToVariableImmediate(v1.v, v2.value.value());
+		if (v1.imm) {
+			writeImmediateToVariable(getLastCompilerVar(), v1.value.value());
+		}
+		else {
+			writeVariableToVariable(getLastCompilerVar(), v1.v);
+			if (v2.imm) {
+				addToVariableImmediate(getLastCompilerVar(), v2.value.value());
+				break;
+			}
+			addToVariableVariable(getLastCompilerVar(), v2.v);
 			break;
 		}
-		addToVariableVariable(v1.v, v2.v);
-		break;
-	case OP_MUL:
-
-		if (v2.imm) {
-			multiplyVariableImmediate(v1.v, v2.value.value());
-			break;
-		}
-		multiplyVariableVariable(v1.v, v2.v);
-		break;
 	}
 }
 
-void convertExpression(operatorNode& node) {
+void convertExpression(operatorNode & node) {
 	std::pair<std::optional<syntaxNode&>, std::optional<syntaxNode&>> childParentLowest = findDeepestNode(node);
 
 	if (childParentLowest.first.value().type == nodeType::opNode) {

@@ -47,6 +47,8 @@ void saveVariableFromRegisters(storedVar& v);
 
 void writeImmediateToVariable(const storedVar& v, const int value);
 
+void writeVariableToVariable(const storedVar& dst, const storedVar& src);
+
 void addToVariableImmediate(const storedVar& v, const int value);
 
 void addToVariableVariable(const storedVar& dst, const storedVar& src);
@@ -58,3 +60,5 @@ void pushCompilerVar(const int sz);
 void multiplyVariableVariable(const storedVar& dst, const storedVar& src);
 
 storedVar& getLastCompilerVar();
+
+storedVar popCompilerVar();
