@@ -383,6 +383,43 @@ void multiplyVariableVariable(const storedVar& dst, const storedVar& src) {
 	}
 }
 
+void multiplyVariableVariablePushCompiler(const storedVar& dst, const storedVar& src) {
+	const int addr = findDistanceFromStackStart(dst);
+
+	const int addr2 = findDistanceFromStackStart(src);
+
+	const int transferSize = (dst.size < src.size) ? dst.size : src.size;
+
+	pushCompilerVar(transferSize);
+
+	const int addr3 = findDistanceFromStackStart(getLastCompilerVar());
+
+	for (int b = 0; b < transferSize - 1; b++) {
+		lds(DUMP_REG, RAMEND - (addr + b));
+
+		lds(TEMP_REG, RAMEND - (addr2 + b));
+
+		muls(DUMP_REG, TEMP_REG);
+
+		if (b == 0) {
+			mov(DUMP_REG, 0);
+			sts(RAMEND - (addr3 + b), DUMP_REG);
+			mov(DUMP_REG, 1);
+			sts(RAMEND - (addr3 + b + 1), DUMP_REG);
+			continue;
+		}
+
+		mov(TEMP_REG, 0);
+		add(DUMP_REG, TEMP_REG);
+		sts(RAMEND - (addr3 + b), DUMP_REG);
+
+		mov(TEMP_REG, 1);
+		lds(DUMP_REG, RAMEND - (addr + b + 1));
+		adc(DUMP_REG, TEMP_REG);
+		sts(RAMEND - (addr3 + b + 1), DUMP_REG);
+	}
+}
+
 void pushCompilerVar(const int sz) {
 	std::string tmp = " " + std::to_string(compilerVarIdx.size());
 	const storedVar t = addVariable(tmp.c_str(), sz);
@@ -391,7 +428,12 @@ void pushCompilerVar(const int sz) {
 }
 
 storedVar& getLastCompilerVar() {
+	printf("%d\n", currentStack[compilerVarIdx[compilerVarIdx.size() - 1]].size);
 	return currentStack[compilerVarIdx[compilerVarIdx.size() - 1]];
+}
+
+storedVar& getSecondToLastCompilerVar() {
+	return currentStack[compilerVarIdx[compilerVarIdx.size() - 2]];
 }
 
 storedVar popCompilerVar() {

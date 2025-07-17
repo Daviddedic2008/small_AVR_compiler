@@ -5,6 +5,7 @@
 #include "src/headers/compiler.h"
 #include "src/headers/variableManager.h"
 #include "src/headers/am328pEm.h"
+#include "src/headers/assemblyGenerator.h"
 
 using namespace std;
 
@@ -30,9 +31,11 @@ int main()
 
     syntaxNode* n = parseTokens();
 
+    convertExpression(n->childNodes[0]);
+
     printf("\n");
 
-    setupVm();
+    //setupVm();
 
     //runVm();
 

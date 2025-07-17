@@ -14,7 +14,7 @@ struct storedVar {
 
 	storedVar() {}
 
-	storedVar(const char sz, const const char* name, const unsigned char scopeValue = currentScope, const bool compilerGenerated = false) :
+	storedVar(const char sz, const char* name, const unsigned char scopeValue = currentScope, const bool compilerGenerated = false) :
 		size(sz), name(name), scopeValue(scopeValue), compilerGenerated(compilerGenerated), startRegister(-1) {
 	}
 
@@ -55,10 +55,14 @@ void addToVariableVariable(const storedVar& dst, const storedVar& src);
 
 void multiplyVariableImmediate(const storedVar& v, const int value);
 
+void multiplyVariableVariablePushCompiler(const storedVar& dst, const storedVar& src);
+
 void pushCompilerVar(const int sz);
 
 void multiplyVariableVariable(const storedVar& dst, const storedVar& src);
 
 storedVar& getLastCompilerVar();
+
+storedVar& getSecondToLastCompilerVar();
 
 storedVar popCompilerVar();
