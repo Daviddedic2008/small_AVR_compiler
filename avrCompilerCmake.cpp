@@ -30,8 +30,12 @@ int main()
     setTokenSrc(returnTokenList());
 
     syntaxNode* n = parseTokens();
+    printf("\nfinished parsing...\n");
+    operatorNode op = operatorNode(token(OPERATION_TOKEN, OP_PLUS));
 
-    convertExpression(n->childNodes[0]);
+    op.childNodes[0] = new literalNode(3);
+    op.childNodes[1] = new literalNode(4);
+    asmOp(op);
 
     printf("\n");
 

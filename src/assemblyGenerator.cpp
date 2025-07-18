@@ -11,14 +11,19 @@ void setParentNode(const syntaxNode& n) {
 }
 
 char nodeSize(const syntaxNode* n) {
-	const literalNode* litPtr = dynamic_cast<const literalNode*>(n);
-	if (litPtr) {
+	if (n->type == nodeType::literalNode) {
 		return 4;
 	}
 
 	else {
 		return dynamic_cast<const identifierNode*>(n)->allocSize;
 	}
+}
+
+char getGreaterChildSize(const syntaxNode* parent) {
+	const char s1 = nodeSize(parent->childNodes[0]); const char s2 = nodeSize(parent->childNodes[1]);
+
+	return s1 > s2 ? s1 : s2;
 }
 
 void asmOp(const operatorNode& node) {
@@ -35,7 +40,7 @@ void asmOp(const operatorNode& node) {
 		}
 		break;
 	case OP_PLUS:
-		pushCompilerVar(nodeSize(&node));
+		pushCompilerVar(getGreaterChildSize(&node));
 		switch (node.childNodes[0]->type) {
 		case nodeType::literalNode:
 			writeImmediateToVariable(getLastCompilerVar(), dynamic_cast<literalNode*>(node.childNodes[0])->value);
@@ -54,7 +59,7 @@ void asmOp(const operatorNode& node) {
 		addToVariableVariable(getLastCompilerVar(), findVariableFromName(dynamic_cast<identifierNode*>(node.childNodes[1])->identifier.str.c_str()));
 		break;
 	case OP_MUL:
-		pushCompilerVar(nodeSize(&node));
+		pushCompilerVar(getGreaterChildSize(&node));
 		switch (node.childNodes[0]->type) {
 		case nodeType::literalNode:
 			writeImmediateToVariable(getLastCompilerVar(), dynamic_cast<literalNode*>(node.childNodes[0])->value);

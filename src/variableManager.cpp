@@ -428,7 +428,6 @@ void pushCompilerVar(const int sz) {
 }
 
 storedVar& getLastCompilerVar() {
-	printf("%d\n", currentStack[compilerVarIdx[compilerVarIdx.size() - 1]].size);
 	return currentStack[compilerVarIdx[compilerVarIdx.size() - 1]];
 }
 
