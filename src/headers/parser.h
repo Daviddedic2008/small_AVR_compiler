@@ -19,6 +19,7 @@ enum class nodeType {
 
 class syntaxNode {
 public:
+    const char* evalName;
     virtual ~syntaxNode() {
         for (auto child : childNodes) {
             delete child;
@@ -58,7 +59,9 @@ class literalNode : public syntaxNode {
 public:
     int value;
 
-    literalNode(int v) : syntaxNode(nodeType::literalNode), value(v) {}
+    literalNode(int v) : syntaxNode(nodeType::literalNode), value(v) {
+        type = nodeType::literalNode;
+    }
 
     bool canParseFurther() {
         return false;
@@ -69,7 +72,9 @@ class identifierNode : public syntaxNode {
 public:
     token_str identifier;
 
-    identifierNode(token_str s) : syntaxNode(nodeType::identifierNode), identifier(s) {}
+    identifierNode(token_str s) : syntaxNode(nodeType::identifierNode), identifier(s) {
+        type = nodeType::identifierNode;
+    }
 
     bool canParseFurther() {
         return true;
@@ -79,10 +84,12 @@ public:
 class operatorNode : public syntaxNode {
 public:
     token operatorToken;
-
-    operatorNode() {}
+    operatorNode() {
+        type = nodeType::opNode;
+    }
 
     operatorNode(token op) : syntaxNode(nodeType::opNode), operatorToken(op) {
+        type = nodeType::opNode;
         syntaxNode* tmp = nullptr;
         for (int i = 0; i < 2; i++) {
             addToRight(tmp);

@@ -2,6 +2,7 @@
 #include "headers/variableManager.h"
 #include "headers/parser.h"
 #include "headers/tokenizer.h"
+#include "headers/opcodes.h"
 #include <optional>
 
 syntaxNode programParentNode;
@@ -26,55 +27,90 @@ char getGreaterChildSize(const syntaxNode* parent) {
 	return s1 > s2 ? s1 : s2;
 }
 
-void asmOp(const operatorNode& node) {
-	// assumes opNode has child nodes that are both either literal or variable
+int evalNode(const operatorNode& node) {
 	switch (node.operatorToken.subtype) {
-	case OP_EQUALS:
-		switch (node.childNodes[1]->type) {
-		case nodeType::literalNode:
-			writeImmediateToVariable(findVariableFromName(dynamic_cast<identifierNode*>(node.childNodes[0])->identifier.str.c_str()), dynamic_cast<literalNode*>(node.childNodes[1])->value);
-			break;
-		case nodeType::identifierNode:
-			writeVariableToVariable(findVariableFromName(dynamic_cast<identifierNode*>(node.childNodes[0])->identifier.str.c_str()), findVariableFromName(dynamic_cast<identifierNode*>(node.childNodes[1])->identifier.str.c_str()));
-			break;
-		}
-		break;
 	case OP_PLUS:
-		pushCompilerVar(getGreaterChildSize(&node));
-		switch (node.childNodes[0]->type) {
-		case nodeType::literalNode:
-			writeImmediateToVariable(getLastCompilerVar(), dynamic_cast<literalNode*>(node.childNodes[0])->value);
-			break;
-
-		case nodeType::identifierNode:
-			writeVariableToVariable(getLastCompilerVar(), findVariableFromName(dynamic_cast<identifierNode*>(node.childNodes[0])->identifier.str.c_str()));
-			break;
+		if (!(dynamic_cast<literalNode*>(node.childNodes[0]) && dynamic_cast<literalNode*>(node.childNodes[1]))) {
 		}
-
-		if (node.childNodes[1]->type == nodeType::literalNode) {
-			addToVariableImmediate(getLastCompilerVar(), dynamic_cast<literalNode*>(node.childNodes[1])->value);
-			break;
-		}
-
-		addToVariableVariable(getLastCompilerVar(), findVariableFromName(dynamic_cast<identifierNode*>(node.childNodes[1])->identifier.str.c_str()));
-		break;
+		return dynamic_cast<literalNode*>(node.childNodes[0])->value + dynamic_cast<literalNode*>(node.childNodes[1])->value;
 	case OP_MUL:
-		pushCompilerVar(getGreaterChildSize(&node));
-		switch (node.childNodes[0]->type) {
-		case nodeType::literalNode:
-			writeImmediateToVariable(getLastCompilerVar(), dynamic_cast<literalNode*>(node.childNodes[0])->value);
-			break;
-
-		case nodeType::identifierNode:
-			writeVariableToVariable(getLastCompilerVar(), findVariableFromName(dynamic_cast<identifierNode*>(node.childNodes[0])->identifier.str.c_str()));
-			break;
-		}
-		if (node.childNodes[1]->type == nodeType::literalNode) {
-			multiplyVariableImmediate(getLastCompilerVar(), dynamic_cast<literalNode*>(node.childNodes[1])->value);
-			break;
-		}
-
-		multiplyVariableVariable(getLastCompilerVar(), findVariableFromName(dynamic_cast<identifierNode*>(node.childNodes[1])->identifier.str.c_str()));
-		break;
+		return dynamic_cast<literalNode*>(node.childNodes[0])->value * dynamic_cast<literalNode*>(node.childNodes[1])->value;
+	default:
+		return 0;
 	}
+}
+
+void asmOp(syntaxNode** ovrNode) {
+	operatorNode* node = dynamic_cast<operatorNode*>(*ovrNode);
+	// assumes opNode has child nodes that are both either literal or variable
+	if (node->operatorToken.subtype == OP_EQUALS) {
+		std::string name = dynamic_cast<identifierNode*>(node->childNodes[0])->identifier.str;
+		storedVar v = findVariableFromName(name);
+		switch (node->childNodes[1]->type) {
+		case nodeType::literalNode:
+			if (v.size == -1) {
+				addVariableImmediate(name, dynamic_cast<literalNode*>(node->childNodes[1])->value);
+				break;
+			}
+			writeImmediateToVariable(v, dynamic_cast<literalNode*>(node->childNodes[1])->value);
+			break;
+		case nodeType::identifierNode:
+			if (v.size == -1) {
+				addVariableVar(name, findVariableFromName(dynamic_cast<identifierNode*>(node->childNodes[1])->identifier.str));
+				break;
+			}
+			writeVariableToVariable(v, findVariableFromName(dynamic_cast<identifierNode*>(node->childNodes[1])->identifier.str));
+			break;
+		}
+		delete *ovrNode;
+		*ovrNode = new identifierNode(token_str(token(NAME_TOKEN, NAME_VAR), name));
+	}
+	else if (node->operatorToken.subtype == OP_PLUS) {
+		if (node->childNodes[0]->type == nodeType::literalNode) {
+			if (node->childNodes[1]->type == nodeType::literalNode) {
+				int tmp = evalNode(*node);
+				delete *ovrNode;
+				*ovrNode = new literalNode(tmp);
+				return;
+			}
+			loadValueIntoRegisters(dynamic_cast<literalNode*>(node->childNodes[0])->value, 16);
+			loadVarIntoRegisters(findVariableFromName(dynamic_cast<identifierNode*>(node->childNodes[1])->identifier.str), 20);
+			const storedVar sv = findVariableFromName(dynamic_cast<identifierNode*>(node->childNodes[1])->identifier.str);
+
+			int startreg, sz, secondreg, wsize;
+			if (4 < sv.size) {
+				startreg = 20;
+				secondreg = 16;
+				wsize = sv.size;
+				sz = 4;
+			}
+			else {
+				startreg = 16;
+				secondreg = 20;
+				wsize = 4;
+				sz = sv.size;
+			}
+
+			add(startreg, secondreg);
+			for (int o = 1; o < sz; o++) {
+				adc(startreg + o, secondreg + o);
+			}
+
+			pushCompilerVarRegs(startreg, wsize);
+		}
+		
+		delete *ovrNode;
+		*ovrNode = new identifierNode(token_str(token(NAME_TOKEN, NAME_VAR), getLastCompilerVar().name));
+	}
+}
+
+void assembleOpTree(syntaxNode** startNode) {
+	// should be enough to work?.....
+	if ((*startNode)->childNodes[0]->type == nodeType::opNode) {
+		assembleOpTree(&(*startNode)->childNodes[0]);
+	}
+	if ((*startNode)->childNodes[1]->type == nodeType::opNode) {
+		assembleOpTree(&(*startNode)->childNodes[1]);
+	}
+	asmOp(startNode);
 }

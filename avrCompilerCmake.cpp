@@ -31,11 +31,11 @@ int main()
 
     syntaxNode* n = parseTokens();
     printf("\nfinished parsing...\n");
-    operatorNode op = operatorNode(token(OPERATION_TOKEN, OP_PLUS));
 
-    op.childNodes[0] = new literalNode(3);
-    op.childNodes[1] = new literalNode(4);
-    asmOp(op);
+    printNode(n);
+    printf("\n\n");
+    operatorNode op = operatorNode(token(OPERATION_TOKEN, OP_PLUS));
+    assembleOpTree(&n->childNodes[0]);
 
     printf("\n");
 

@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <cstring>
+#include <string>
 
 extern unsigned char currentScope;
 
@@ -9,23 +10,23 @@ struct storedVar {
 	char size; // 1 or 4 bytes (for now)
 	char startRegister; // -1 if not in regs
 	unsigned char scopeValue;
-	const char* name;
+	std::string name;
 	bool compilerGenerated; // tmp variables created by compiler are flagged to prevent naming issues
 
 	storedVar() {}
 
-	storedVar(const char sz, const char* name, const unsigned char scopeValue = currentScope, const bool compilerGenerated = false) :
+	storedVar(const char sz, std::string name, const unsigned char scopeValue = currentScope, const bool compilerGenerated = false) :
 		size(sz), name(name), scopeValue(scopeValue), compilerGenerated(compilerGenerated), startRegister(-1) {
 	}
 
 	inline bool operator==(const storedVar& v) const {
-		return size == size && (strcmp(this->name, v.name) == 0) && compilerGenerated == v.compilerGenerated;
+		return size == size && name == v.name && compilerGenerated == v.compilerGenerated;
 	}
 };
 
 int referenceVariable(const storedVar& v);
 
-storedVar addVariable(const char* name, const char size);
+storedVar addVariable(std::string name, const char size);
 
 storedVar addVariable(const storedVar& add);
 
@@ -37,7 +38,7 @@ void incrementScope();
 
 int findVariableInStack(const storedVar& v);
 
-storedVar findVariableFromName(const char* name);
+storedVar findVariableFromName(std::string name);
 
 void readStackIntoRegisters(storedVar& v);
 
@@ -66,3 +67,15 @@ storedVar& getLastCompilerVar();
 storedVar& getSecondToLastCompilerVar();
 
 storedVar popCompilerVar();
+
+void pushCompilerVarImmediate(const int value);
+
+void pushCompilerVarRegs(const char regstart, const unsigned char size);
+
+void loadVarIntoRegisters(const storedVar& var, const char startReg);
+
+void loadValueIntoRegisters(const int value, const char startReg);
+
+storedVar addVariableImmediate(std::string name, const int value);
+
+storedVar addVariableVar(std::string name, const storedVar& var);

@@ -3,6 +3,7 @@
 #include "headers/opcodes.h"
 #include "headers/variableManager.h"
 #include "headers/tokenizer.h"
+#include <string>
 
 #include "SETUP/boardType.h"
 
@@ -28,10 +29,44 @@ std::vector<storedVar> currentStack;
 
 std::vector<int> compilerVarIdx;
 
-storedVar addVariable(const char* name, const char size) {
+int findDistanceFromStackStart(const storedVar& v) {
+	int ret = 0;
+
+	for (const storedVar& tmp : currentStack) {
+		if (tmp == v) {
+			return ret;
+		}
+		ret += tmp.size;
+	}
+
+	return ret;
+}
+
+storedVar addVariable(std::string name, const char size) {
 	storedVar add = storedVar(size, name);
 	currentStack.push_back(add);
 	for (int i = 0; i < size; i++) {
+		push(16);
+	}
+	return add;
+}
+
+storedVar addVariableImmediate(std::string name, const int value) {
+	storedVar add = storedVar(4, name);
+	
+	currentStack.push_back(add);
+	for (int i = 0; i < 4; i++) {
+		ldi(16,((char*)&value)[i]);
+		push(16);
+	}
+	return add;
+}
+
+storedVar addVariableVar(std::string name, const storedVar& var) {
+	storedVar add = storedVar(4, name);
+	currentStack.push_back(add);
+	for (int i = 0; i < 4; i++) {
+		lds(16, RAMEND - findDistanceFromStackStart(var) - i);
 		push(16);
 	}
 	return add;
@@ -110,27 +145,14 @@ int getStackSize() {
 	return ret;
 }
 
-storedVar findVariableFromName(const char* name) {
+storedVar findVariableFromName(std::string name) {
 	for (const storedVar v : currentStack) {
-		if (strcmp(name, v.name) == 0) {
+		if (v.name == name) {
 			return v;
 		}
 	}
 
 	return storedVar(-1, "");
-}
-
-int findDistanceFromStackStart(const storedVar& v) {
-	int ret = 0;
-
-	for (storedVar tmp : currentStack) {
-		if (tmp == v) {
-			return ret;
-		}
-		ret += tmp.size;
-	}
-
-	return ret;
 }
 
 void readStackIntoRegisters(storedVar& v) {
@@ -427,6 +449,44 @@ void pushCompilerVar(const int sz) {
 	compilerVarIdx.push_back(findVariableInStack(t));
 }
 
+void pushCompilerVarImmediate(const int value) {
+	std::string tmp = " " + std::to_string(compilerVarIdx.size());
+	const storedVar t = addVariableImmediate(tmp.c_str(), value);
+
+	compilerVarIdx.push_back(findVariableInStack(t));
+}
+
+void pushCompilerVarVar(const storedVar& var) {
+	std::string tmp = " " + std::to_string(compilerVarIdx.size());
+	const storedVar t = addVariableVar(tmp.c_str(), var);
+
+	compilerVarIdx.push_back(findVariableInStack(t));
+}
+
+void pushCompilerVarRegs(const char regstart, const unsigned char size) {
+	std::string tmpn = " " + std::to_string(compilerVarIdx.size());
+
+	for (int r = regstart; r < regstart + size; r++) {
+		push(r);
+	}
+
+	const storedVar tmp = storedVar(size, tmpn.c_str());
+	compilerVarIdx.push_back(findVariableInStack(tmp));
+}
+
+void loadValueIntoRegisters(const int value, const char startReg) {
+	// loads starting at r16
+	for (int o = startReg; o < startReg+4; o++) {
+		ldi(o, ((const char*)&value)[o - startReg]);
+	}
+}
+
+void loadVarIntoRegisters(const storedVar& var, const char startReg) {
+	for (int r = startReg; r < startReg + var.size; r++) {
+		lds(r, RAMEND - findDistanceFromStackStart(var) - r + startReg);
+	}
+}
+
 storedVar& getLastCompilerVar() {
 	return currentStack[compilerVarIdx[compilerVarIdx.size() - 1]];
 }
@@ -441,3 +501,4 @@ storedVar popCompilerVar() {
 	compilerVarIdx.pop_back();
 	return tmp;
 }
+
