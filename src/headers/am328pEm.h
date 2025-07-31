@@ -17,6 +17,8 @@ enum class opcodeType {
 	mov,
 	add,
 	adc,
+	sub,
+	subc,
 	mul,
 	brge,
 	brlt,

@@ -37,4 +37,12 @@ void add(const char reg1, const char reg2);
 
 void adc(const char reg1, const char reg2);
 
+void sub(const char reg1, const char reg2);
+
+void subc(const char reg1, const char reg2);
+
 void muls(const char reg1, const char reg2);
+
+void movw(const char reg1, const char reg2);
+
+void clc();
