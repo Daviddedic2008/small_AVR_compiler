@@ -172,6 +172,33 @@ void asmOp(syntaxNode** ovrNode) {
 	}
 }
 
+void skipIfSmaller(const int r1, const int s1, const int r2, const int s2) {
+	const char* tmplbl = "tempLabel"; // fix later
+	const char* endlbl = "endLabel"; // fix later
+	const int lessSz = (s1 < s2) ? s1 : s2;
+	for (int o1 = 0; o1 < lessSz; o1++) {
+		cp(r1 + s1 - o1, r2 + s2 - o1);
+		brlt(tmplbl);
+		brne(endlbl);
+	}
+
+	writeLabel(endlbl); // saves a lil cycles
+}
+
+void subFromFirst(const int startRegisterDividend, const int sizeDividend, const int startRegisterDivisor, const int sizeDivisor) {
+
+}
+
+void softwareDiv(const int startRegisterDividend, const int sizeDividend, const int startRegisterDivisor, const int sizeDivisor) {
+	// dividend must  always be before divisor(dividend starts at r16)
+
+	const unsigned char mask = 1 << 0; // first iteration
+	const int resultRegisterStart = startRegisterDividend + sizeDividend + sizeDividend;
+	skipIfSmaller(startRegisterDividend, sizeDividend, startRegisterDivisor, sizeDivisor);
+
+
+}
+
 void assembleOpTree(syntaxNode** startNode) {
 	// should be enough to work?.....
 	if ((*startNode)->childNodes[0]->type == nodeType::opNode) {
