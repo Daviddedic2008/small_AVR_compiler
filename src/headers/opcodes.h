@@ -46,3 +46,19 @@ void muls(const char reg1, const char reg2);
 void movw(const char reg1, const char reg2);
 
 void clc();
+
+void ror(const char reg);
+
+void lsr(const char reg);
+
+void rol(const char reg);
+
+void lsl(const char reg);
+
+void inc(const char reg);
+
+void dec(const char reg);
+
+void brcc(const char* lbl);
+
+void sec();

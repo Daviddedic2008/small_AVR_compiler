@@ -172,12 +172,12 @@ void asmOp(syntaxNode** ovrNode) {
 	}
 }
 
-void skipIfSmaller(const int r1, const int s1, const int r2, const int s2) {
+void skipIfSmaller(const int r1, const int s1, const int r2, const int s2, const int off) {
 	const char* tmplbl = "tempLabel"; // fix later
 	const char* endlbl = "endLabel"; // fix later
 	const int lessSz = (s1 < s2) ? s1 : s2;
 	for (int o1 = 0; o1 < lessSz; o1++) {
-		cp(r1 + s1 - o1, r2 + s2 - o1);
+		cp(r1 + lessSz - o1, r2 + lessSz - o1);
 		brlt(tmplbl);
 		brne(endlbl);
 	}
@@ -186,17 +186,84 @@ void skipIfSmaller(const int r1, const int s1, const int r2, const int s2) {
 }
 
 void subFromFirst(const int startRegisterDividend, const int sizeDividend, const int startRegisterDivisor, const int sizeDivisor) {
-
+	sub(startRegisterDividend, startRegisterDivisor);
+	for (int o = 1; o < sizeDivisor; o++) {
+		subc(startRegisterDividend + o, startRegisterDivisor + o);
+	}
 }
 
-void softwareDiv(const int startRegisterDividend, const int sizeDividend, const int startRegisterDivisor, const int sizeDivisor) {
+void softwareDiv32(const int startRegisterDividend, const int startRegisterDivisor) {
 	// dividend must  always be before divisor(dividend starts at r16)
+	// 32 x 32 bit div subroutine
+	// will add 32 x 16 and 16 x 16 later lazy rn
+	const int rem1 = 10;
+	const int rem2 = 11;
+	const int rem3 = 12;
+	const int rem4 = 14;
 
-	const unsigned char mask = 1 << 0; // first iteration
-	const int resultRegisterStart = startRegisterDividend + sizeDividend + sizeDividend;
-	skipIfSmaller(startRegisterDividend, sizeDividend, startRegisterDivisor, sizeDivisor);
+	const int dividend1 = startRegisterDividend;
+	const int dividend2 = startRegisterDividend + 1;
+	const int dividend3 = startRegisterDividend + 2;
+	const int dividend4 = startRegisterDividend + 3;
 
+	const int divisor1 = startRegisterDivisor;
+	const int divisor2 = startRegisterDivisor + 1;
+	const int divisor3 = startRegisterDivisor + 2;
+	const int divisor4 = startRegisterDivisor + 3;
 
+	const int result1 = dividend1 + 4 + 4;
+	const int result2 = result1 + 1;
+	const int result3 = result2 + 1;
+	const int result4 = result3 + 1;
+
+	const int count1 = 32;
+
+	clr(rem1);
+	clr(rem2);
+	clr(rem3);
+	sub(rem4, rem4);
+	ldi(count1, 33);
+
+	writeLabel("d32u_1");
+	// loop to shift ts dividend into remainder one bit at a time
+	rol(dividend1);
+	rol(dividend2);
+	rol(dividend3);
+	rol(dividend4);
+	dec(count1);
+	brne("d32u_2"); // if counter is 0, all bits pushed
+	rjmp("end");
+
+	writeLabel("d32u_2");
+	// rotate the carry bit from dividend into remainder regs
+	rol(rem1);
+	rol(rem2);
+	rol(rem3);
+	rol(rem4);
+	// subtract divisor from remainder regs
+	sub(rem1, divisor1);
+	subc(rem2, divisor2);
+	subc(rem3, divisor3);
+	subc(rem4, divisor4);
+	brcc("d32u_3");
+	// if carry flag is set, meaning divisor more than remainder
+	// add back divisor, and clear carry so we dont accidentally set a bit in the 
+	add(rem1, divisor1);
+	adc(rem2, divisor2);
+	adc(rem3, divisor3);
+	adc(rem4, divisor4);
+	clc();
+	rjmp("skp");
+
+	writeLabel("d32u_3");
+	sec();
+	writeLabel("skp");
+	// rotate carry set earlier into result regs
+	rol(result1);
+	rol(result2);
+	rol(result3);
+	rol(result4);
+	rjmp("d32u_1");
 }
 
 void assembleOpTree(syntaxNode** startNode) {
