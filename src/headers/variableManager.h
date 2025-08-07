@@ -68,7 +68,7 @@ storedVar& getSecondToLastCompilerVar();
 
 storedVar popCompilerVar();
 
-void pushCompilerVarImmediate(const int value);
+void pushCompilerVarImmediate(const int value, const int sz = 4);
 
 void pushCompilerVarRegs(const char regstart, const unsigned char size);
 
@@ -76,6 +76,8 @@ void loadVarIntoRegisters(const storedVar& var, const char startReg);
 
 void loadValueIntoRegisters(const int value, const char startReg);
 
-storedVar addVariableImmediate(std::string name, const int value);
+storedVar addVariableImmediate(std::string name, const int value, const int sz);
 
 storedVar addVariableVar(std::string name, const storedVar& var);
+
+int findDistanceFromStackStart(const storedVar& v);

@@ -51,12 +51,24 @@ storedVar addVariable(std::string name, const char size) {
 	return add;
 }
 
-storedVar addVariableImmediate(std::string name, const int value) {
-	storedVar add = storedVar(4, name);
+storedVar addVariableImmediate(std::string name, const int value, const int sz) {
+	// up to 4 bytes
+	storedVar add = storedVar(sz, name);
 	
 	currentStack.push_back(add);
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < sz; i++) {
 		ldi(16,((char*)&value)[i]);
+		push(16);
+	}
+	return add;
+}
+
+storedVar addVariableImmediatePtr(std::string name, const int value) {
+	storedVar add = storedVar(4, name);
+
+	currentStack.push_back(add);
+	for (int i = 0; i < 2; i++) {
+		ldi(16, ((char*)&value)[i]);
 		push(16);
 	}
 	return add;
@@ -449,9 +461,9 @@ void pushCompilerVar(const int sz) {
 	compilerVarIdx.push_back(findVariableInStack(t));
 }
 
-void pushCompilerVarImmediate(const int value) {
+void pushCompilerVarImmediate(const int value, const int sz = 4) {
 	std::string tmp = " " + std::to_string(compilerVarIdx.size());
-	const storedVar t = addVariableImmediate(tmp.c_str(), value);
+	const storedVar t = addVariableImmediate(tmp.c_str(), value, sz);
 
 	compilerVarIdx.push_back(findVariableInStack(t));
 }

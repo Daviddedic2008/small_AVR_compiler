@@ -62,3 +62,11 @@ void dec(const char reg);
 void brcc(const char* lbl);
 
 void sec();
+
+void ld(const char reg, const char* ptr);
+
+void ldd(const char reg, const char* ptroff);
+
+void OR(const char reg1, const char reg2);
+
+void cpc(const char reg1, const char reg2);
