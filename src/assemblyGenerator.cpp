@@ -400,6 +400,52 @@ void asmOp(syntaxNode** ovrNode) {
 	}
 }
 
+void asmChunk(syntaxNode** startNode) {
+
+}
+
+void ifAsm(syntaxNode** startNode) {
+	// assuming startNode is a keyword node
+	incrementScope();
+	assembleOpTree(&(*startNode)->childNodes[0]);
+	loadVarIntoRegisters(getLastCompilerVar(), 10);
+	cpi(10, 0);
+	breq("endOfThisIf");
+	asmChunk(&(*startNode)->childNodes[1]);
+	decrementScope();
+	writeLabel("endOfThisIf");
+}
+
+void forAsm(syntaxNode** startNode) {
+	// assuming startNode is a keyword node
+	incrementScope();
+	assembleOpTree(&(*startNode)->childNodes[0]);
+	writeLabel("startLoop");
+	assembleOpTree(&(*startNode)->childNodes[1]);
+	loadVarIntoRegisters(getLastCompilerVar(), 10);
+	cpi(10, 0);
+	breq("endOfThisFor");
+	asmChunk(&(*startNode)->childNodes[3]);
+	assembleOpTree(&(*startNode)->childNodes[2]);
+	rjmp("startLoop");
+	writeLabel("endOfThisFor");
+	decrementScope();
+}
+
+void whileAsm(syntaxNode** startNode) {
+	// assuming startNode is a keyword node
+	incrementScope();
+	writeLabel("startLoop");
+	assembleOpTree(&(*startNode)->childNodes[0]);
+	loadVarIntoRegisters(getLastCompilerVar(), 10);
+	cpi(10, 0);
+	breq("endOfThisWhile");
+	asmChunk(&(*startNode)->childNodes[1]);
+	rjmp("startLoop");
+	writeLabel("endOfThisWhile");
+	decrementScope();
+}
+
 void assembleOpTree(syntaxNode** startNode) {
 	// should be enough to work?.....
 	if ((*startNode)->childNodes[0]->type == nodeType::opNode) {
@@ -410,3 +456,4 @@ void assembleOpTree(syntaxNode** startNode) {
 	}
 	asmOp(startNode);
 }
+
