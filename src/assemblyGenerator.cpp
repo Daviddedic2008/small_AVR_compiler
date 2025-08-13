@@ -144,7 +144,7 @@ void asmOp(syntaxNode** ovrNode) {
 		switch (node->childNodes[1]->type) {
 		case nodeType::literalNode:
 			if (v.size == -1) {
-				addVariableImmediate(name, dynamic_cast<literalNode*>(node->childNodes[1])->value);
+				addVariableImmediate(name, dynamic_cast<literalNode*>(node->childNodes[1])->value, 4);
 				break;
 			}
 			writeImmediateToVariable(v, dynamic_cast<literalNode*>(node->childNodes[1])->value);
@@ -401,7 +401,26 @@ void asmOp(syntaxNode** ovrNode) {
 }
 
 void asmChunk(syntaxNode** startNode) {
-
+	for (int i = 0; i < (*startNode)->childNodes.size(); i++) {
+		syntaxNode** n = &(*startNode)->childNodes[i];
+		switch ((*n)->type) {
+		case nodeType::opNode:
+			assembleOpTree(n);
+			break;
+		case nodeType::keywordNode:
+			keywordNode tmp = *dynamic_cast<keywordNode*>(*n);
+			if (tmp.keywordToken.subtype == IDENTIFIER_FOR) {
+				forAsm(n);
+			}
+			else if (tmp.keywordToken.subtype == IDENTIFIER_IF) {
+				ifAsm(n);
+			}
+			else if (tmp.keywordToken.subtype == IDENTIFIER_WHILE) {
+				whileAsm(n);
+			}
+			break;
+		}
+	}
 }
 
 void ifAsm(syntaxNode** startNode) {

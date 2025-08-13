@@ -461,7 +461,7 @@ void pushCompilerVar(const int sz) {
 	compilerVarIdx.push_back(findVariableInStack(t));
 }
 
-void pushCompilerVarImmediate(const int value, const int sz = 4) {
+void pushCompilerVarImmediate(const int value, const int sz) {
 	std::string tmp = " " + std::to_string(compilerVarIdx.size());
 	const storedVar t = addVariableImmediate(tmp.c_str(), value, sz);
 

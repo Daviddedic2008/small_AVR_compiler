@@ -11,3 +11,9 @@ void convertExpression(syntaxNode* node); // tmp test
 void asmOp(syntaxNode** node); // test
 
 void assembleOpTree(syntaxNode** startNode);
+
+void ifAsm(syntaxNode** startNode);
+
+void forAsm(syntaxNode** startNode);
+
+void whileAsm(syntaxNode** startNode);
