@@ -17,3 +17,5 @@ void ifAsm(syntaxNode** startNode);
 void forAsm(syntaxNode** startNode);
 
 void whileAsm(syntaxNode** startNode);
+
+void asmChunk(syntaxNode** startNode);

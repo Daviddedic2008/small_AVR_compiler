@@ -31,11 +31,9 @@ int main()
 
     syntaxNode* n = parseTokens();
     printf("\nfinished parsing...\n");
-
     printNode(n);
     printf("\n\n");
-    operatorNode op = operatorNode(token(OPERATION_TOKEN, OP_PLUS));
-    assembleOpTree(&n->childNodes[0]);
+    asmChunk(&n);
 
     printf("\n");
 
@@ -46,5 +44,5 @@ int main()
     //printReg(16);
 
     //printCmp();
-    
+    delete n;
 }

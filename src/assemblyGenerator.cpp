@@ -137,7 +137,6 @@ void softwareDiv32(const int startRegisterDividend, const int startRegisterDivis
 void asmOp(syntaxNode** ovrNode) {
 	operatorNode* node = dynamic_cast<operatorNode*>(*ovrNode);
 	// assumes opNode has child nodes that are both either literal or variable
-
 	if (node->operatorToken.subtype == OP_EQUALS) {
 		std::string name = dynamic_cast<identifierNode*>(node->childNodes[0])->identifier.str;
 		storedVar v = findVariableFromName(name);
@@ -468,10 +467,10 @@ void whileAsm(syntaxNode** startNode) {
 void assembleOpTree(syntaxNode** startNode) {
 	// should be enough to work?.....
 	if ((*startNode)->childNodes[0]->type == nodeType::opNode) {
-		assembleOpTree(&(*startNode)->childNodes[0]);
+		assembleOpTree(&((*startNode)->childNodes[0]));
 	}
 	if ((*startNode)->childNodes[1]->type == nodeType::opNode) {
-		assembleOpTree(&(*startNode)->childNodes[1]);
+		assembleOpTree(&((*startNode)->childNodes[1]));
 	}
 	asmOp(startNode);
 }
